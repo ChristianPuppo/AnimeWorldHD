@@ -176,6 +176,9 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
+        if (headers["Cookie"].isNullOrEmpty()) {
+            setupHeaders()
+        }
         val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
