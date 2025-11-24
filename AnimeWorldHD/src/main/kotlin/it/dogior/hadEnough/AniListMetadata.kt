@@ -89,17 +89,12 @@ object AniListMetadataFetcher {
                 }
             """.trimIndent()
 
-            val payload = mapOf(
+            val body = mapOf(
                 "query" to query,
-                "variables" to mapOf("id" to anilistId)
+                "variables" to """{"id":$anilistId}"""
             )
 
-            val response = app.post(
-                anilistApiUrl, 
-                headers = headerJSON, 
-                data = payload,
-                json = true
-            )
+            val response = app.post(anilistApiUrl, headers = headerJSON, data = body)
             parseJson<AniListResponse>(response.text).data?.media
         } catch (e: Exception) {
             null
