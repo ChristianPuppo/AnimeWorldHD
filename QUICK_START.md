@@ -95,7 +95,25 @@ Configuration contains AndroidX dependencies, but the `android.useAndroidX` prop
 **Fix**: Creato `gradle.properties` con `android.useAndroidX=true` e `android.enableJetifier=true`  
 **Commit**: `1e7a4b2`
 
-✅ **Ora il workflow funziona perfettamente!**
+### Fix 5: AniList GraphQL Variables Format
+**Errore**:
+```
+Argument type mismatch: actual type is 'Map<String, Any>', but 'Map<String, String>?' was expected
+```
+
+**Fix**: Le `variables` GraphQL devono essere stringa JSON `"""{"id":$id}"""`, non `Map`  
+**Commit**: `4b5e402`
+
+### Fix 6: GitHub Actions Write Permissions
+**Errore**:
+```
+remote: Permission to ChristianPuppo/AnimeWorldHD.git denied to github-actions[bot]
+```
+
+**Fix**: Aggiunto `permissions: contents: write` al workflow  
+**Commit**: `1be9858`
+
+✅ **Build completato! 18 plugin creati incluso AnimeWorldHD.cs3!**
 
 ---
 
