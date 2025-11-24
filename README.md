@@ -97,7 +97,7 @@ CloudStream espanderà automaticamente il link completo.
 | AnimeWorld | [animeworld.tv](https://animeworld.tv) | Anime | ✅ | Versione standard |
 | AnimeUnity | [animeunity.so](https://www.animeunity.so) | Anime | ✅ | |
 | AltaDefinizione | [altadefinizionegratis.store](https://altadefinizionegratis.store) | Film, TV, Cartoni | ✅ | |
-| StreamingCommunity | [streamingunity.co](https://streamingunity.co) | Film, TV, Cartoni | ✅ | Fix v24 Inertia headers |
+| StreamingCommunity | [streamingunity.co](https://streamingunity.co) | Film, TV, Cartoni | ✅ | Fix v25 Inertia headers |
 | CB01 | [cb01.uno](https://cb01.uno) | Film, TV | ✅ | Richiede prerelease CS |
 | CalcioStreaming | [guardacalcio.icu](https://guardacalcio.icu) | Sport Live | ✅ | |
 | CorsaroNero | [ilcorsaronero.link](https://ilcorsaronero.link) | Film | ✅ | |

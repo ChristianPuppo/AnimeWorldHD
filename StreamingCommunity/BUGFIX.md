@@ -1,4 +1,4 @@
-# StreamingCommunity Fix v24
+# StreamingCommunity Fix v25
 
 ## 🐛 Problema
 
@@ -84,6 +84,18 @@ inertiaVersion = inertiaPageObject
 ---
 
 **Fix by**: Chruis  
-**Version**: 24  
+**Version**: 25  
 **Date**: 2025-11-24  
-**Commit**: `41e1025` 
+**Commit**: `6f52cf1`
+
+---
+
+## 🔄 Changelog
+
+### v25 (Latest)
+- ✅ Fix `setupHeaders()` anche in `search(query, page)`
+- ✅ Headers passati correttamente a tutte le chiamate API
+
+### v24
+- ✅ Fix `setupHeaders()` in `getMainPage()`
+- ✅ Headers passati a chiamate API di getMainPage 
