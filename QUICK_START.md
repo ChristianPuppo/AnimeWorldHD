@@ -86,6 +86,15 @@ Wrapper properties file does not exist
 **Fix**: Aggiunta eccezione a `.gitignore` per `gradle-wrapper.properties`  
 **Commit**: `72ea95d`
 
+### Fix 4: AndroidX Configuration Missing
+**Errore**:
+```
+Configuration contains AndroidX dependencies, but the `android.useAndroidX` property is not enabled
+```
+
+**Fix**: Creato `gradle.properties` con `android.useAndroidX=true` e `android.enableJetifier=true`  
+**Commit**: `1e7a4b2`
+
 ✅ **Ora il workflow funziona perfettamente!**
 
 ---
