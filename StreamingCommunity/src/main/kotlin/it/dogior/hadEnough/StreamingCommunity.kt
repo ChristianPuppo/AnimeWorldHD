@@ -41,6 +41,10 @@ class StreamingCommunity : MainAPI() {
     override var lang = "it"
     override val hasMainPage = true
 
+    init {
+        Log.d(TAG, "StreamingCommunity initialized! hasMainPage=$hasMainPage, mainUrl=$mainUrl")
+    }
+
     companion object {
         private var inertiaVersion = ""
         private val headers = mapOf(
