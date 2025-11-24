@@ -3,6 +3,8 @@ package it.dogior.hadEnough
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.utils.AppUtils.parseJson
+import com.lagradost.cloudstream3.utils.AppUtils.toJson
 
 /**
  * Data class for ani.zip image metadata
@@ -87,13 +89,18 @@ object AniListMetadataFetcher {
                 }
             """.trimIndent()
 
-            val data = mapOf(
+            val payload = mapOf(
                 "query" to query,
                 "variables" to mapOf("id" to anilistId)
             )
 
-            val response = app.post(anilistApiUrl, headers = headerJSON, data = data)
-            response.parsedSafe<AniListResponse>()?.data?.media
+            val response = app.post(
+                anilistApiUrl, 
+                headers = headerJSON, 
+                data = payload,
+                json = true
+            )
+            parseJson<AniListResponse>(response.text).data?.media
         } catch (e: Exception) {
             null
         }
