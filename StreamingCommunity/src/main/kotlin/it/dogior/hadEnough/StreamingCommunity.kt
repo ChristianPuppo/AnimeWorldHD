@@ -110,7 +110,8 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        // TEST: Rimuoviamo temporaneamente gli headers per vedere se funziona
+        Log.d(TAG, "getMainPage called - page: $page, request: ${request.name}")
+        
         var url = mainUrl.substringBeforeLast("/") + "/api" +
                 request.data.substringAfter(mainUrl)
         val params = mutableMapOf("lang" to "it")
@@ -118,38 +119,45 @@ class StreamingCommunity : MainAPI() {
         val section = request.data.substringAfterLast("/")
         when (section) {
             "trending" -> {
-//                Log.d(TAG, "TRENDING")
+                Log.d(TAG, "Section: TRENDING")
             }
 
             "latest" -> {
-//                Log.d(TAG, "LATEST")
+                Log.d(TAG, "Section: LATEST")
             }
 
             "top10" -> {
-//                Log.d(TAG, "TOP10")
+                Log.d(TAG, "Section: TOP10")
             }
 
             else -> {
                 val genere = url.substringAfterLast('=')
                 url = url.substringBeforeLast('?')
                 params["g"] = genere
+                Log.d(TAG, "Section: GENRE - $genere")
             }
         }
 
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        // TEST: Chiamiamo senza headers
+        
+        Log.d(TAG, "Calling API: $url with params: $params")
         val response = app.get(url, params = params)
         val responseString = response.body.string()
+        Log.d(TAG, "Response length: ${responseString.length}")
+        
         val responseJson = parseJson<Section>(responseString)
+        Log.d(TAG, "Parsed titles: ${responseJson.titles.size}")
 
         val titlesList = searchResponseBuilder(responseJson.titles)
+        Log.d(TAG, "Built search responses: ${titlesList.size}")
 
         val hasNextPage =
             response.okhttpResponse.request.url.queryParameter("offset")?.toIntOrNull()
                 ?.let { it < 120 } ?: true && titlesList.size == 60
 
+        Log.d(TAG, "Returning HomePageResponse with ${titlesList.size} items, hasNextPage: $hasNextPage")
         return newHomePageResponse(
             HomePageList(
                 name = request.name,
@@ -161,26 +169,34 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String): List<SearchResponse> {
-        // TEST: Usiamo direttamente l'API search senza headers Inertia
+        Log.d(TAG, "search() called with query: $query")
         val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
         val params = mapOf("q" to query, "lang" to "it")
         
+        Log.d(TAG, "Calling search API: $searchUrl")
         val response = app.get(searchUrl, params = params).body.string()
+        Log.d(TAG, "Search response length: ${response.length}")
+        
         val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+        Log.d(TAG, "Parsed search results: ${result.data.size}")
 
-        return searchResponseBuilder(result.data)
+        val results = searchResponseBuilder(result.data)
+        Log.d(TAG, "Returning ${results.size} search results")
+        return results
     }
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        // TEST: Rimossi headers
+        Log.d(TAG, "search(paginated) called - query: $query, page: $page")
         val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
+        Log.d(TAG, "Calling search API: $searchUrl with params: $params")
         val response = app.get(searchUrl, params = params).body.string()
         val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+        Log.d(TAG, "Search results: ${result.data.size}, current page: ${result.currentPage}, last page: ${result.lastPage}")
         val hasNext = (page < 3) || (page < result.lastPage)
         return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
     }
