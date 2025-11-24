@@ -40,6 +40,7 @@ class StreamingCommunity : MainAPI() {
         setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
     override var lang = "it"
     override val hasMainPage = true
+    override val hasQuickSearch = false
 
     companion object {
         private var inertiaVersion = ""
@@ -54,26 +55,11 @@ class StreamingCommunity : MainAPI() {
         val TAG = "SCommunity"
     }
 
-    private val sectionNamesList = mainPageOf(
-        "$mainUrl/browse/top10" to "Top 10 di oggi",
-        "$mainUrl/browse/trending" to "I Titoli Del Momento",
-        "$mainUrl/browse/latest" to "Aggiunti di Recente",
-        "$mainUrl/browse/genre?g=Animation" to "Animazione",
-        "$mainUrl/browse/genre?g=Adventure" to "Avventura",
-        "$mainUrl/browse/genre?g=Action" to "Azione",
-        "$mainUrl/browse/genre?g=Comedy" to "Commedia",
-        "$mainUrl/browse/genre?g=Crime" to "Crime",
-        "$mainUrl/browse/genre?g=Documentary" to "Documentario",
-        "$mainUrl/browse/genre?g=Drama" to "Dramma",
-        "$mainUrl/browse/genre?g=Family" to "Famiglia",
-        "$mainUrl/browse/genre?g=Science Fiction" to "Fantascienza",
-        "$mainUrl/browse/genre?g=Fantasy" to "Fantasy",
-        "$mainUrl/browse/genre?g=Horror" to "Horror",
-        "$mainUrl/browse/genre?g=Reality" to "Reality",
-        "$mainUrl/browse/genre?g=Romance" to "Romance",
-        "$mainUrl/browse/genre?g=Thriller" to "Thriller",
+    override val mainPage = mainPageOf(
+        "https://streamingunity.co/it/browse/top10" to "Top 10 di oggi",
+        "https://streamingunity.co/it/browse/trending" to "I Titoli Del Momento",
+        "https://streamingunity.co/it/browse/latest" to "Aggiunti di Recente",
     )
-    override val mainPage = sectionNamesList
 
     private suspend fun setupHeaders() {
         val response = app.get("$mainUrl/archive")
