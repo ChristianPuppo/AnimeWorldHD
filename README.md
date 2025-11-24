@@ -1,38 +1,234 @@
-# [doGior](https://github.com/doGior)'s Had Enough
+# 🎬 AnimeWorldHD - CloudStream Repository
 
-[Read in english](https://github.com/doGior/doGiorsHadEnough/blob/master/README_en.md) <br><br>
-Ciao sono doGior e sono stanco di cercare plugin per Cloudstream che finiscono per non funzionare
-ed essere abbandonati, quindi ho deciso di creare una mia repository.
-
-## Installazione
-
-Clicca sulla pizza per installare la repo oppure vai in *Impostazioni* -> *Estensioni* -> *Aggiungi
-repository* e nel campo URL scrivi **doGior**
 <p align="center">
-  <img alt="alt_text" width="200px" src="pizza.png"/>
+  <img src="https://img.shields.io/badge/CloudStream-Extensions-blue" alt="CloudStream"/>
+  <img src="https://img.shields.io/badge/Anime-HD_Metadata-red" alt="HD Metadata"/>
+  <img src="https://img.shields.io/badge/Language-Italian-green" alt="Italian"/>
+  <img src="https://img.shields.io/badge/Fork-doGior-orange" alt="Fork"/>
 </p>
 
-### Plugin
-Questi sono i plugin disponibili al momento
-| **Nome**           | **Sito**                                               |            **Categorie**            | **Lingua** | **Funzionante** | **Note**                                                                                                                                                                                                  |
-|--------------------|--------------------------------------------------------|:-----------------------------------:|:----------:|:---------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|  
-| Altadefinizione         | https://altadefinizionegratis.store                              |                Film, TV Show, Cartoni, Documentari                |    🇮🇹    |        ✅        |                                                                                                                                                                                                           |
-| AnimeUnity         | https://www.animeunity.so                              |                Anime                |    🇮🇹    |        ✅        |                                                                                                                                                                                                           |
-| AnimeWorld         | https://www.animeworld.ac                              |                Anime                |    🇮🇹    |        ✅        | |
-| Arte         | https://www.arte.tv                              |                Documentari                |    🇮🇹    |        ✅        | Più avanti saranno aggiunte le altre lingue|
-| CalcioStreaming    | https://guardacalcio.icu                       |             Sport Live              |    🇮🇹    |        ✅        | Fork da [ItalianProvider](https://github.com/Gian-Fr/ItalianProvider)                                                                                                                                     |
-| CorsaroNero    | https://ilcorsaronero.link                       |             Film              |    🇮🇹    |        ✅        |  |
-| CB01               | https://cb01.uno                                       |            Film, TV Show            |    🇮🇹    |        ✅        | ⚠️ Potrebbe essere necessario scaricare la versione prerelease di cloudstream perché funzioni ⚠️                                                                                                          |
-| DaddyLive          | https://daddylive.dad                                   |           TV e Sport Live           |    🇺🇳    |        ✅        | ⚠️ Potrebbe essere necessario l'uso di una VPN perché funzioni⚠️                                                                                                                                          |
-| Huhu               | https://huhu.to                                        |               TV Live               |    🇺🇳    |        ✅        |                                                                                                                                                                                                           |
-| OnlineSerieTV      | https://onlineserietv.com                              | Film, TV Show, Cartoni, Documentari |    🇮🇹    |        ❌        | Hanno aggiunto cloudflare 😞                                                                                                                                                                              |
-| StreamingCommunity | https://streamingunity.to/it                        | Film, TV Show, Cartoni, Documentari |    🇮🇹    |        ✅        |                                                                                                                                                                                                           |
-| Torrentio         | https://torrentio.strem.fun                              |     Film, TV Shows, Cartoni, Anime        |    🇮🇹    |        ✅        |  |
-| ToonItalia         | https://toonitalia.green/                              |      Cartoni, Anime, TV Shows       |    🇮🇹    |        ❌        | |
-| TV                 | https://github.com/Free-TV/IPTV/blob/master/playlists/ |               TV Live               |    🇺🇳    |        ✅        | Fork da [ItalianProvider](https://github.com/Gian-Fr/ItalianProvider)                                                                                                                                     |
-| YouTube            | https://www.youtube.com/                               |                Altro                |    🇺🇳    |        ❌        | Puoi incollare l'url di un canale o di una playlist nelle impostazioni del plugin per averli come sezioni nella homepage. Se li vuoi come "serie tv" abiliti i relativi plugin nella ricerca e cercali lì |
+---
 
-[Tutte le repository per cloudstream](https://rentry.org/cs3-repos)
+## 📖 About This Repository
 
-## Donazioni
-[Supportami <3](https://buymeacoffee.com/dogior)
+Questo repository è un **fork** del progetto originale [**doGiorsHadEnough**](https://github.com/doGior/doGiorsHadEnough) di [doGior](https://github.com/doGior), con modifiche e migliorie sviluppate da **Chruis**.
+
+### 🎯 Differenze Principali
+
+| Caratteristica | Originale (doGior) | Questo Fork (Chruis) |
+|---------------|-------------------|---------------------|
+| **AnimeWorld** | Versione standard | ➕ **AnimeWorldHD** con metadata AniList |
+| **Qualità Immagini** | Standard (SD) | ⭐ **HD 1920x1080** (Fanart da ani.zip) |
+| **Banner Hero** | Poster 225x338px | 🖼️ **Wide Banner 1920x1080px** |
+| **Metadata** | Solo AnimeWorld | 🎨 **ani.zip + AniList GraphQL API** |
+| **Fallback Images** | Nessuno | 🔄 **Triple Fallback System** |
+
+---
+
+## ⭐ Novità: AnimeWorldHD
+
+**AnimeWorldHD** è una versione potenziata dell'estensione **AnimeWorld** che integra metadata di alta qualità da:
+
+- 🎨 **[ani.zip](https://ani.zip)** - Community-curated Fanart (1920x1080)
+- 📊 **[AniList](https://anilist.co)** - Banner e Cover ufficiali
+- 🇮🇹 **[AnimeWorld](https://animeworld.tv)** - Contenuti ITA + AniList IDs
+
+### 🚀 Vantaggi di AnimeWorldHD
+
+| Feature | Descrizione |
+|---------|-------------|
+| 🖼️ **Hero Banner HD** | Banner 1920x1080 invece di 225x338 (8.5x più pixel!) |
+| 🎯 **ID-Based Fetching** | Usa AniList IDs (no ricerca per titolo) |
+| 🔄 **Smart Fallback** | ani.zip → AniList → AnimeWorld (sempre un'immagine!) |
+| ⚡ **Zero Text Search** | Niente ricerche ambigue, solo match precisi |
+| 🇮🇹 **100% Compatibile** | Stesso catalogo AnimeWorld + visual migliorati |
+
+### 📸 Qualità Visiva
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  HERO BANNER                                                │
+├─────────────────────────────────────────────────────────────┤
+│  AnimeWorld Standard:   225 x 338px  =   76,050 pixel     │
+│  AnimeWorldHD Fanart:  1920 x 1080px = 2,073,600 pixel    │
+│                                                             │
+│  🎨 27x PIÙ PIXEL = QUALITÀ CINEMATOGRAFICA!               │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📦 Installazione
+
+### Metodo 1️⃣: Link Completo (Consigliato)
+
+1. Apri **CloudStream**
+2. Vai in **Impostazioni** → **Estensioni**
+3. Clicca **"+ Aggiungi repository"**
+4. Incolla:
+   ```
+   https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/repo.json
+   ```
+5. Clicca **OK**
+
+### Metodo 2️⃣: Link Corto
+
+```
+ChristianPuppo/AnimeWorldHD
+```
+
+CloudStream espanderà automaticamente il link completo.
+
+---
+
+## 🎮 Plugin Disponibili
+
+### ⭐ Nuovi / Modificati
+
+| Plugin | Descrizione | Status | Note |
+|--------|-------------|:------:|------|
+| **AnimeWorldHD** 🆕 | Anime con HD metadata (ani.zip + AniList) | ✅ | **NOVITÀ DI QUESTO FORK!** |
+
+### 🇮🇹 Plugin Italiani (da doGior)
+
+| Plugin | Sito | Categorie | Status | Note |
+|--------|------|-----------|:------:|------|
+| AnimeWorld | [animeworld.tv](https://animeworld.tv) | Anime | ✅ | Versione standard |
+| AnimeUnity | [animeunity.so](https://www.animeunity.so) | Anime | ✅ | |
+| AltaDefinizione | [altadefinizionegratis.store](https://altadefinizionegratis.store) | Film, TV, Cartoni | ✅ | |
+| StreamingCommunity | [streamingunity.to](https://streamingunity.to) | Film, TV, Cartoni | ⚠️ | Verifica dominio |
+| CB01 | [cb01.uno](https://cb01.uno) | Film, TV | ✅ | Richiede prerelease CS |
+| CalcioStreaming | [guardacalcio.icu](https://guardacalcio.icu) | Sport Live | ✅ | |
+| CorsaroNero | [ilcorsaronero.link](https://ilcorsaronero.link) | Film | ✅ | |
+| Arte | [arte.tv](https://www.arte.tv) | Documentari | ✅ | Multi-lingua in futuro |
+| Torrentio | [torrentio.strem.fun](https://torrentio.strem.fun) | Film, TV, Anime | ✅ | |
+
+### 🌍 Plugin Internazionali (da doGior)
+
+| Plugin | Descrizione | Status | Note |
+|--------|-------------|:------:|------|
+| DaddyLive | TV e Sport Live | ✅ | Potrebbe richiedere VPN |
+| Huhu | TV Live | ✅ | |
+| IPTV | Canali TV (Free-TV/IPTV) | ✅ | |
+| TV | Canali TV Live | ✅ | |
+
+---
+
+## 🔧 Sviluppo
+
+### Requisiti
+
+- Java 17+
+- Android SDK
+- Gradle 8.12+
+
+### Build Locale
+
+```bash
+cd doGiorsHadEnough-master
+./gradlew make makePluginsJson
+```
+
+### GitHub Actions
+
+Il repository usa GitHub Actions per build automatici:
+- ✅ Trigger su push a `main`
+- ✅ Compila tutti i `.cs3`
+- ✅ Genera `plugins.json` e `repo.json`
+- ✅ Pubblica su branch `builds`
+
+---
+
+## 📚 Documentazione
+
+- **[Quick Start Guide](QUICK_START.md)** - Setup rapido in 3 passi
+- **[CloudStream Setup](CLOUDSTREAM_SETUP.md)** - Guida completa setup
+- **[AnimeWorldHD README](AnimeWorldHD/README.md)** - Dettagli tecnici AnimeWorldHD
+- **[AnimeWorldHD CHANGELOG](AnimeWorldHD/CHANGELOG.md)** - Spiegazione sistema di fetching
+- **[API Test Results](AnimeWorldHD/API_TEST_RESULTS.txt)** - Risultati test ani.zip + AniList
+
+---
+
+## 🙏 Crediti
+
+### Progetto Originale
+- **[doGior](https://github.com/doGior)** - Autore del repository originale [doGiorsHadEnough](https://github.com/doGior/doGiorsHadEnough)
+- Tutti i plugin italiani eccetto AnimeWorldHD sono opera di doGior e dei contributori originali
+
+### Modifiche e Migliorie di Questo Fork
+- **Chruis** ([ChristianPuppo](https://github.com/ChristianPuppo)) - AnimeWorldHD + Integrazione ani.zip/AniList
+
+### Tecnologie
+- **[CloudStream](https://github.com/recloudstream/cloudstream)** - App di streaming
+- **[ani.zip](https://ani.zip)** - Community-curated anime metadata
+- **[AniList](https://anilist.co)** - Anime database e API GraphQL
+- **[AnimeWorld](https://animeworld.tv)** - Fonte contenuti italiani
+
+---
+
+## 💡 Perché Un Fork?
+
+Ho deciso di creare questo fork per:
+
+1. ✅ **Mantenere separati i progetti** - Le modifiche HD sono sperimentali
+2. ✅ **Testare nuove feature** - Integrazione ani.zip è una proof-of-concept
+3. ✅ **Libertà di sviluppo** - Posso iterare velocemente senza impattare l'originale
+4. ✅ **Crediti chiari** - Il lavoro di doGior rimane riconosciuto
+
+**Rispetto totale per il progetto originale di doGior!** ❤️
+
+Se le modifiche HD dovessero interessare, sono disponibile a contribuire upstream tramite PR.
+
+---
+
+## 🔗 Link Utili
+
+- **Repository Originale**: https://github.com/doGior/doGiorsHadEnough
+- **Questo Fork**: https://github.com/ChristianPuppo/AnimeWorldHD
+- **Branch Builds**: https://github.com/ChristianPuppo/AnimeWorldHD/tree/builds
+- **GitHub Actions**: https://github.com/ChristianPuppo/AnimeWorldHD/actions
+
+### Altre Repository CloudStream
+
+- [Lista Completa Repository CS3](https://rentry.org/cs3-repos)
+- [Documentazione CloudStream](https://recloudstream.github.io/csdocs/)
+
+---
+
+## 💝 Supporto
+
+### Supporta doGior (Autore Originale)
+- [Buy Me a Coffee](https://buymeacoffee.com/dogior) ☕
+
+### Supporta Questo Fork
+Se apprezzi le migliorie HD e vuoi supportare lo sviluppo di questo fork, considera:
+- ⭐ Dai una stella a questo repository
+- 🐛 Segnala bug o suggerimenti via Issues
+- 🔀 Contribuisci con Pull Requests
+
+---
+
+## 📜 Licenza
+
+Questo fork mantiene la stessa licenza del progetto originale.
+
+---
+
+## 🚀 Status Repository
+
+| Componente | Status | Note |
+|------------|:------:|------|
+| GitHub Actions | ✅ | Auto-build attivo |
+| Branch `builds` | ✅ | Aggiornato automaticamente |
+| `repo.json` | ✅ | Configurato correttamente |
+| `plugins.json` | ✅ | Generato automaticamente |
+| AnimeWorldHD | ✅ | Funzionante e testato |
+| Altri Plugin | ✅ | Ereditati da doGior |
+
+---
+
+<p align="center">
+  <b>Made with ❤️ by Chruis</b><br>
+  <i>Powered by doGior's original work + ani.zip + AniList</i><br>
+  🇮🇹 🎌 🎬
+</p>
