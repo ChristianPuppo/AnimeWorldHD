@@ -37,10 +37,9 @@ class StreamingCommunity : MainAPI() {
     override var mainUrl = Companion.mainUrl
     override var name = Companion.name
     override var supportedTypes =
-        setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
+        setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon)
     override var lang = "it"
     override val hasMainPage = true
-    override val hasQuickSearch = false
 
     companion object {
         private var inertiaVersion = ""
@@ -56,9 +55,9 @@ class StreamingCommunity : MainAPI() {
     }
 
     override val mainPage = mainPageOf(
-        "https://streamingunity.co/it/browse/top10" to "Top 10 di oggi",
-        "https://streamingunity.co/it/browse/trending" to "I Titoli Del Momento",
-        "https://streamingunity.co/it/browse/latest" to "Aggiunti di Recente",
+        "$mainUrl/browse/top10" to "Top 10 di oggi",
+        "$mainUrl/browse/trending" to "I Titoli Del Momento",
+        "$mainUrl/browse/latest" to "Aggiunti di Recente",
     )
 
     private suspend fun setupHeaders() {
