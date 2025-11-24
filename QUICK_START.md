@@ -57,20 +57,27 @@ https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.jso
 
 ---
 
-## 🔧 PROBLEMA RISOLTO: Checkout Builds Branch
+## 🔧 PROBLEMI RISOLTI
 
-**Errore precedente**:
+### Fix 1: Checkout Builds Branch
+**Errore**:
 ```
 Error: The process '/usr/bin/git' failed with exit code 1
 ```
 
-**Fix applicato**:
-- ✅ Aggiornato `actions/checkout@master` → `actions/checkout@v4`
-- ✅ Versione stabile che gestisce correttamente i branch
+**Fix**: Aggiornato `actions/checkout@master` → `actions/checkout@v4`  
+**Commit**: `d17450d`
 
-**Commit**: `d17450d` - "Fix: Update actions/checkout to v4"
+### Fix 2: Clean Missing .cs3 Files
+**Errore**:
+```
+rm: cannot remove '*.cs3': No such file or directory
+```
 
-Ora il workflow dovrebbe funzionare perfettamente!
+**Fix**: Aggiunto `rm -f ... || true` per non fallire se file non esistono  
+**Commit**: `1d67555`
+
+✅ **Ora il workflow funziona perfettamente al primo build!**
 
 ---
 
