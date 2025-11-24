@@ -110,9 +110,7 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        if (headers["Cookie"].isNullOrEmpty()) {
-            setupHeaders()
-        }
+        // TEST: Rimuoviamo temporaneamente gli headers per vedere se funziona
         var url = mainUrl.substringBeforeLast("/") + "/api" +
                 request.data.substringAfter(mainUrl)
         val params = mutableMapOf("lang" to "it")
@@ -141,7 +139,8 @@ class StreamingCommunity : MainAPI() {
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        val response = app.get(url, params = params, headers = headers)
+        // TEST: Chiamiamo senza headers
+        val response = app.get(url, params = params)
         val responseString = response.body.string()
         val responseJson = parseJson<Section>(responseString)
 
@@ -162,29 +161,25 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val url = "$mainUrl/search"
-        val params = mapOf("q" to query)
+        // TEST: Usiamo direttamente l'API search senza headers Inertia
+        val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
+        val params = mapOf("q" to query, "lang" to "it")
+        
+        val response = app.get(searchUrl, params = params).body.string()
+        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
 
-        if (headers["Cookie"].isNullOrEmpty()) {
-            setupHeaders()
-        }
-        val response = app.get(url, params = params, headers = headers).body.string()
-        val result = parseJson<InertiaResponse>(response)
-
-        return searchResponseBuilder(result.props.titles!!)
+        return searchResponseBuilder(result.data)
     }
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        if (headers["Cookie"].isNullOrEmpty()) {
-            setupHeaders()
-        }
+        // TEST: Rimossi headers
         val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        val response = app.get(searchUrl, params = params, headers = headers).body.string()
+        val response = app.get(searchUrl, params = params).body.string()
         val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
         val hasNext = (page < 3) || (page < result.lastPage)
         return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
