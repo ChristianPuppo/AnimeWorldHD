@@ -1,0 +1,137 @@
+[
+    {
+        "iconUrl": "https://www.animeunity.co/apple-touch-icon.png",
+        "fileHash": "sha256-e67afeb08739fbfdb5c1b62695acebfaa50dc40b5449522e0e94eafdd34f6068",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 38462,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 16,
+        "internalName": "AnimeUnity",
+        "description": "Anime in streaming SUB-ITA e ITA da AnimeUnity.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeUnity.cs3",
+        "name": "AnimeUnity"
+    },
+    {
+        "iconUrl": "https://static.animeworld.ac/assets/images/favicon/android-icon-192x192.png?s",
+        "fileHash": "sha256-0794586536d959e6818c9619b5361534149ae31444b4eb46317ed86b3943df54",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 39019,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 17,
+        "internalName": "AnimeWorld",
+        "description": "Anime in streaming SUB-ITA e ITA da AnimeWorld.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorld.cs3",
+        "name": "AnimeWorld"
+    },
+    {
+        "iconUrl": "https://static.animeworld.ac/assets/images/favicon/android-icon-192x192.png?s",
+        "fileHash": "sha256-149a757ac9ad26d691f538b4131d8b239be9519a18868dab5e656ca38b789446",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 47701,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior",
+            "Chruis"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 2,
+        "internalName": "AnimeWorldHD",
+        "description": "Anime in streaming da AnimeWorld con metadati e poster in alta risoluzione tramite AniList & ani.zip.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorldHD.cs3",
+        "name": "AnimeWorldHD"
+    },
+    {
+        "iconUrl": "https://cb01one.com/apple-icon-180x180px.png",
+        "fileHash": "sha256-b26b37ece9569daefb333c16eb6885488df15c2ab36a676dfefa435f7c330326",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 36345,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Cartoon"
+        ],
+        "version": 14,
+        "internalName": "CB01",
+        "description": "Film e Serie TV da CB01 (CineBlog01).",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/CB01.cs3",
+        "name": "CB01"
+    },
+    {
+        "iconUrl": "https://streamingcommunityz.build/apple-touch-icon.png?v=2",
+        "fileHash": "sha256-0509c81df2290685de5ff41176a0b691b958959cf4a71614445239edb978a3f0",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 51500,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Documentary",
+            "Cartoon"
+        ],
+        "version": 43,
+        "internalName": "StreamingCommunity",
+        "description": "Film e Serie TV da StreamingCommunity in italiano con rilevamento automatico del dominio.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/StreamingCommunity.cs3",
+        "name": "StreamingCommunity"
+    },
+    {
+        "iconUrl": "https://vixsrc.to/favicon.ico",
+        "fileHash": "sha256-eca81bd4acb31b6904c7a5d23f3e4209b1206fd686b0c0e57620a2b6d97286a1",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 39198,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie"
+        ],
+        "version": 2,
+        "internalName": "VixStream",
+        "description": "Film e Serie TV via VixCloud e TMDB con audio italiano ed alta definizione (FHD).",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/VixStream.cs3",
+        "name": "VixStream"
+    }
+]

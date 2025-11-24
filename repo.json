@@ -1,0 +1,8 @@
+{
+    "name": "AnimeWorldHD - Italian Extensions with HD Metadata",
+    "description": "CloudStream extensions for Italian content with premium HD metadata from ani.zip and AniList. Features AnimeWorldHD with 1920x1080 Fanart banners!",
+    "manifestVersion": 1,
+    "pluginLists": [
+        "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json"
+    ]
+} 
