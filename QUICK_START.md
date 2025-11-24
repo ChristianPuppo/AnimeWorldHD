@@ -1,0 +1,147 @@
+# 🚀 Quick Start - AnimeWorldHD Repository
+
+## ✅ STATO: PRONTA PER IL BUILD!
+
+Tutto è configurato correttamente:
+- ✅ Repository GitHub creata
+- ✅ Branch `main` e `builds` pronti
+- ✅ Workflow GitHub Actions corretto (v4)
+- ✅ `build.gradle.kts` configurato
+
+---
+
+## 🎯 3 PASSI PER PARTIRE
+
+### 1️⃣ Configura Secret TMDB_API (2 minuti)
+
+**Vai qui**: https://github.com/ChristianPuppo/AnimeWorldHD/settings/secrets/actions
+
+**Opzione Veloce (test)**:
+- Clicca "New repository secret"
+- Nome: `TMDB_API`
+- Valore: `dummy_key_12345`
+- Salva
+
+### 2️⃣ Avvia Build (1 click)
+
+**Vai qui**: https://github.com/ChristianPuppo/AnimeWorldHD/actions
+
+- Clicca "Build" nella sidebar
+- Clicca "Run workflow" (dropdown)
+- Seleziona branch: `main`
+- Clicca "Run workflow" verde
+- ⏱️ Attendi 5-10 minuti
+
+### 3️⃣ Usa in CloudStream (30 secondi)
+
+**Nell'app CloudStream**:
+1. Impostazioni → Estensioni
+2. "+ Aggiungi repository"
+3. Scrivi: `ChristianPuppo`
+4. OK
+
+**Done!** 🎉
+
+---
+
+## 📱 LINK CLOUDSTREAM
+
+```
+ChristianPuppo
+```
+
+Oppure il link completo:
+```
+https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
+```
+
+---
+
+## 🔧 PROBLEMA RISOLTO: Checkout Builds Branch
+
+**Errore precedente**:
+```
+Error: The process '/usr/bin/git' failed with exit code 1
+```
+
+**Fix applicato**:
+- ✅ Aggiornato `actions/checkout@master` → `actions/checkout@v4`
+- ✅ Versione stabile che gestisce correttamente i branch
+
+**Commit**: `d17450d` - "Fix: Update actions/checkout to v4"
+
+Ora il workflow dovrebbe funzionare perfettamente!
+
+---
+
+## 🎨 COSA OTTERRAI
+
+### AnimeWorldHD - Features
+
+| Feature | Descrizione |
+|---------|-------------|
+| 🖼️ **Fanart HD** | Banner 1920x1080 da ani.zip |
+| 🎯 **AniList API** | Metadata premium come Ultima |
+| 🇮🇹 **Contenuto ITA** | Tutti gli anime da AnimeWorld |
+| 🔄 **Triple Fallback** | ani.zip → AniList → AnimeWorld |
+| ⚡ **Zero Text Search** | Usa ID AniList diretti |
+
+**Hero Banner**: Da immagine SD 225x338 → HD 1920x1080! 🎨
+
+---
+
+## 🧪 TEST RAPIDO
+
+Dopo il build, verifica che funzioni:
+
+### Test 1: plugins.json esiste?
+```bash
+curl https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
+```
+
+Dovresti vedere JSON con array di plugin.
+
+### Test 2: AnimeWorldHD.cs3 esiste?
+```bash
+curl -I https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorldHD.cs3
+```
+
+Dovresti vedere `HTTP/2 200`.
+
+### Test 3: In CloudStream
+1. Aggiungi repository
+2. Scarica "AnimeWorldHD"
+3. Cerca "Attack on Titan"
+4. Guarda il banner hero → dovrebbe essere HD! ✨
+
+---
+
+## 📚 DOCUMENTAZIONE COMPLETA
+
+Per dettagli completi, vedi:
+- **Setup Guide**: `CLOUDSTREAM_SETUP.md`
+- **AnimeWorldHD README**: `AnimeWorldHD/README.md`
+- **Changelog**: `AnimeWorldHD/CHANGELOG.md`
+- **API Tests**: `AnimeWorldHD/API_TEST_RESULTS.txt`
+
+---
+
+## 🆘 HELP
+
+### Build fallisce?
+→ Controlla che il secret `TMDB_API` sia configurato
+
+### Repository non appare in CloudStream?
+→ Aspetta che il workflow finisca (verifica su Actions)
+
+### Immagini HD non appaiono?
+→ Alcuni anime potrebbero non avere ID AniList su AnimeWorld
+
+### Altri problemi?
+→ Apri issue su: https://github.com/ChristianPuppo/AnimeWorldHD/issues
+
+---
+
+**Ready to go! 🚀**
+
+Segui i 3 passi sopra e in 10 minuti avrai la tua repository funzionante! 
