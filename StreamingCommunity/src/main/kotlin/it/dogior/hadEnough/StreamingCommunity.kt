@@ -41,10 +41,6 @@ class StreamingCommunity : MainAPI() {
     override var lang = "it"
     override val hasMainPage = true
 
-    init {
-        Log.d(TAG, "StreamingCommunity initialized! hasMainPage=$hasMainPage, mainUrl=$mainUrl")
-    }
-
     companion object {
         private var inertiaVersion = ""
         private val headers = mapOf(
@@ -114,7 +110,8 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        Log.d(TAG, "getMainPage called - page: $page, request: ${request.name}")
+        return try {
+            Log.d(TAG, "=== getMainPage START === page=$page, request=${request.name}")
         
         var url = mainUrl.substringBeforeLast("/") + "/api" +
                 request.data.substringAfter(mainUrl)
@@ -161,48 +158,65 @@ class StreamingCommunity : MainAPI() {
             response.okhttpResponse.request.url.queryParameter("offset")?.toIntOrNull()
                 ?.let { it < 120 } ?: true && titlesList.size == 60
 
-        Log.d(TAG, "Returning HomePageResponse with ${titlesList.size} items, hasNextPage: $hasNextPage")
-        return newHomePageResponse(
-            HomePageList(
-                name = request.name,
-                list = titlesList,
-                isHorizontalImages = false
-            ), hasNextPage
-        )
+            Log.d(TAG, "Returning HomePageResponse with ${titlesList.size} items, hasNextPage: $hasNextPage")
+            newHomePageResponse(
+                HomePageList(
+                    name = request.name,
+                    list = titlesList,
+                    isHorizontalImages = false
+                ), hasNextPage
+            )
+        } catch (e: Exception) {
+            Log.e(TAG, "=== getMainPage ERROR ===", e)
+            e.printStackTrace()
+            throw e
+        }
     }
 
 
     override suspend fun search(query: String): List<SearchResponse> {
-        Log.d(TAG, "search() called with query: $query")
-        val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
-        val params = mapOf("q" to query, "lang" to "it")
-        
-        Log.d(TAG, "Calling search API: $searchUrl")
-        val response = app.get(searchUrl, params = params).body.string()
-        Log.d(TAG, "Search response length: ${response.length}")
-        
-        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-        Log.d(TAG, "Parsed search results: ${result.data.size}")
+        return try {
+            Log.d(TAG, "=== search() START === query=$query")
+            val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
+            val params = mapOf("q" to query, "lang" to "it")
+            
+            Log.d(TAG, "Calling search API: $searchUrl")
+            val response = app.get(searchUrl, params = params).body.string()
+            Log.d(TAG, "Search response length: ${response.length}")
+            
+            val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+            Log.d(TAG, "Parsed search results: ${result.data.size}")
 
-        val results = searchResponseBuilder(result.data)
-        Log.d(TAG, "Returning ${results.size} search results")
-        return results
+            val results = searchResponseBuilder(result.data)
+            Log.d(TAG, "Returning ${results.size} search results")
+            results
+        } catch (e: Exception) {
+            Log.e(TAG, "=== search() ERROR ===", e)
+            e.printStackTrace()
+            emptyList()
+        }
     }
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        Log.d(TAG, "search(paginated) called - query: $query, page: $page")
-        val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
-        val params = mutableMapOf("q" to query, "lang" to "it")
-        if (page > 0) {
-            params["offset"] = ((page - 1) * 60).toString()
+        return try {
+            Log.d(TAG, "=== search(paginated) START === query=$query, page=$page")
+            val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
+            val params = mutableMapOf("q" to query, "lang" to "it")
+            if (page > 0) {
+                params["offset"] = ((page - 1) * 60).toString()
+            }
+            Log.d(TAG, "Calling search API: $searchUrl with params: $params")
+            val response = app.get(searchUrl, params = params).body.string()
+            val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+            Log.d(TAG, "Search results: ${result.data.size}, current page: ${result.currentPage}, last page: ${result.lastPage}")
+            val hasNext = (page < 3) || (page < result.lastPage)
+            newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
+        } catch (e: Exception) {
+            Log.e(TAG, "=== search(paginated) ERROR ===", e)
+            e.printStackTrace()
+            newSearchResponseList(emptyList())
         }
-        Log.d(TAG, "Calling search API: $searchUrl with params: $params")
-        val response = app.get(searchUrl, params = params).body.string()
-        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-        Log.d(TAG, "Search results: ${result.data.size}, current page: ${result.currentPage}, last page: ${result.lastPage}")
-        val hasNext = (page < 3) || (page < result.lastPage)
-        return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
     }
 
     private suspend fun getPoster(title: TitleProp): String? {
