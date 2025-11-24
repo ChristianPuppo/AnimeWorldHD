@@ -167,7 +167,7 @@ class StreamingCommunity : MainAPI() {
                 ), hasNextPage
             )
         } catch (e: Exception) {
-            Log.e(TAG, "=== getMainPage ERROR ===", e)
+            Log.e(TAG, "=== getMainPage ERROR === ${e.message}")
             e.printStackTrace()
             throw e
         }
@@ -191,7 +191,7 @@ class StreamingCommunity : MainAPI() {
             Log.d(TAG, "Returning ${results.size} search results")
             results
         } catch (e: Exception) {
-            Log.e(TAG, "=== search() ERROR ===", e)
+            Log.e(TAG, "=== search() ERROR === ${e.message}")
             e.printStackTrace()
             emptyList()
         }
@@ -213,7 +213,7 @@ class StreamingCommunity : MainAPI() {
             val hasNext = (page < 3) || (page < result.lastPage)
             newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
         } catch (e: Exception) {
-            Log.e(TAG, "=== search(paginated) ERROR ===", e)
+            Log.e(TAG, "=== search(paginated) ERROR === ${e.message}")
             e.printStackTrace()
             newSearchResponseList(emptyList())
         }
