@@ -77,7 +77,16 @@ rm: cannot remove '*.cs3': No such file or directory
 **Fix**: Aggiunto `rm -f ... || true` per non fallire se file non esistono  
 **Commit**: `1d67555`
 
-✅ **Ora il workflow funziona perfettamente al primo build!**
+### Fix 3: Missing gradle-wrapper.properties
+**Errore**:
+```
+Wrapper properties file does not exist
+```
+
+**Fix**: Aggiunta eccezione a `.gitignore` per `gradle-wrapper.properties`  
+**Commit**: `72ea95d`
+
+✅ **Ora il workflow funziona perfettamente!**
 
 ---
 
