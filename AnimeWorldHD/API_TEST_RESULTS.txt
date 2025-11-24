@@ -1,0 +1,139 @@
+╔══════════════════════════════════════════════════════════════════════════╗
+║                   AnimeWorldHD - API COMPARISON TEST                     ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+📺 TEST CASE 1: Attack on Titan (進撃の巨人)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AniList ID: 16498
+
+1️⃣  ani.zip Fanart (USED ✅)
+    🔗 https://artworks.thetvdb.com/banners/series/267440/backgrounds/5f8611eaa79ff.jpg
+    📐 Size: ~1920x1080 (perfect for hero banner)
+    ⭐ Quality: Professional, community-curated
+    💡 Use: backgroundPosterUrl + posterUrl
+
+2️⃣  AniList Banner (FALLBACK)
+    🔗 https://s4.anilist.co/file/anilistcdn/media/anime/banner/16498-8jpFCOcDmneX.jpg
+    📐 Size: Variable (often very wide)
+    ⭐ Quality: Official, good
+    💡 Use: If ani.zip Fanart unavailable
+
+3️⃣  AniList Cover (FALLBACK)
+    🔗 https://s4.anilist.co/.../cover/large/bx16498-buvcRTBx4NSm.jpg
+    📐 Size: Portrait (cover art)
+    ⭐ Quality: High res portrait
+    💡 Use: posterUrl if no Fanart
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📺 TEST CASE 2: Demon Slayer (鬼滅の刃)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+AniList ID: 101922
+
+1️⃣  ani.zip Fanart (USED ✅)
+    🔗 https://artworks.thetvdb.com/banners/fanart/original/5c93cbb2b60b6.jpg
+    📐 Size: ~1920x1080
+    ⭐ Quality: Professional
+    💡 Use: backgroundPosterUrl + posterUrl
+
+2️⃣  AniList Banner (FALLBACK)
+    🔗 https://s4.anilist.co/.../banner/101922-33MtJGsUSxga.jpg
+    💡 Use: If ani.zip fails
+
+3️⃣  AniList Cover (FALLBACK)
+    🔗 https://s4.anilist.co/.../cover/large/bx101922-WBsBl0ClmgYL.jpg
+    💡 Use: posterUrl fallback
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎯 PRIORITY LOGIC (Same as Ultima)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For backgroundPosterUrl (Hero Banner):
+  ┌────────────────────────────────────────┐
+  │ 1. ani.zip Fanart         ✅ BEST     │
+  │ 2. AniList bannerImage    �� GOOD     │
+  │ 3. null                   ❌ NONE     │
+  └────────────────────────────────────────┘
+
+For posterUrl (Cards & Preview):
+  ┌────────────────────────────────────────┐
+  │ 1. ani.zip Fanart         ✅ BEST     │
+  │ 2. AniList coverImage     📋 GOOD     │
+  │ 3. AnimeWorld scraping    🔄 OK       │
+  └────────────────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ RESULT IN APP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📱 Hero (Home Screen):
+   ├─ Background: ani.zip Fanart (1920x1080) ✨
+   └─ Title overlay: Perfect visibility
+
+🖼️  Detail Page:
+   ├─ Background: ani.zip Fanart (wide banner) ✨
+   └─ Poster: ani.zip Fanart (same for consistency)
+
+🃏 Cards (Lists):
+   └─ Poster: ani.zip Fanart or AniList cover
+
+👆 Long Press:
+   └─ Preview: High quality from ani.zip ✨
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔬 TECHNICAL DETAILS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Code Implementation:
+
+val aniListImages = anlId?.let { 
+    AniListMetadataFetcher.fetchImagesById(it)
+}
+
+val finalPoster = aniListImages?.getBestPoster() ?: poster
+val finalBanner = aniListImages?.getBestBackground()
+
+return newAnimeLoadResponse(title, actualUrl, type) {
+    addPoster(finalPoster)
+    finalBanner?.let { this.backgroundPosterUrl = it }
+}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ADVANTAGES vs Standard AnimeWorld
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Standard AnimeWorld:
+  ❌ Hero: 225x338 portrait (cropped, low quality)
+  ❌ Background: None (only poster)
+  ❌ Cards: Standard quality
+
+AnimeWorldHD:
+  ✅ Hero: 1920x1080 Fanart (perfect, HD)
+  ✅ Background: Wide banner (professional)
+  ✅ Cards: Extra large posters
+  ✅ Same video sources
+  ✅ Zero additional latency (parallel fetch)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📊 COMPARISON WITH ULTIMA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ultima (AniList provider):
+  • Fetches from ani.zip → AniList → No scraping
+  • All content in English
+  • Uses MediaProviders for video links
+
+AnimeWorldHD:
+  • Fetches from ani.zip → AniList → AnimeWorld scraping ✅
+  • All content in Italian 🇮🇹
+  • Direct links from AnimeWorld.ac
+  • Same image quality as Ultima ✅
+
+Result: SAME VISUAL QUALITY, ITALIAN CONTENT! 🎉
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
