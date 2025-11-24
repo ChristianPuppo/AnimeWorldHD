@@ -47,12 +47,12 @@ Tutto è configurato correttamente:
 ## 📱 LINK CLOUDSTREAM
 
 ```
-ChristianPuppo
+https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/repo.json
 ```
 
-Oppure il link completo:
+Oppure il link corto (CloudStream espande automaticamente):
 ```
-https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
+ChristianPuppo/AnimeWorldHD
 ```
 
 ---

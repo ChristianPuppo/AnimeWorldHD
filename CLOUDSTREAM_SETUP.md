@@ -57,10 +57,10 @@ Il workflow:
 Dopo il completamento, verifica che il file esista:
 
 ```
-https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
+https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/repo.json
 ```
 
-Dovresti vedere un JSON con la lista di tutti i plugin disponibili.
+Dovresti vedere un JSON con la configurazione del repository e il link a plugins.json.
 
 ---
 
@@ -68,29 +68,26 @@ Dovresti vedere un JSON con la lista di tutti i plugin disponibili.
 
 Ora puoi aggiungere la repository a CloudStream in **2 modi**:
 
-### Metodo 1️⃣: Link Corto (consigliato)
-
-Nell'app CloudStream:
-1. Vai in **Impostazioni** → **Estensioni**
-2. Clicca **"+ Aggiungi repository"**
-3. Incolla: `ChristianPuppo`
-4. Clicca **OK**
-
-CloudStream risolverà automaticamente a:
-```
-https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
-```
-
-### Metodo 2️⃣: Link Completo
+### Metodo 1️⃣: Link Completo (consigliato)
 
 Nell'app CloudStream:
 1. Vai in **Impostazioni** → **Estensioni**
 2. Clicca **"+ Aggiungi repository"**
 3. Incolla:
 ```
-https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json
+https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/repo.json
 ```
 4. Clicca **OK**
+
+### Metodo 2️⃣: Link Corto
+
+Nell'app CloudStream:
+1. Vai in **Impostazioni** → **Estensioni**
+2. Clicca **"+ Aggiungi repository"**
+3. Incolla: `ChristianPuppo/AnimeWorldHD`
+4. Clicca **OK**
+
+CloudStream espanderà automaticamente al link completo.
 
 ---
 
@@ -128,7 +125,15 @@ Il workflow si attiverà automaticamente quando:
 
 ## 📊 VERIFICA CHE FUNZIONI
 
-### Test 1: Controlla plugins.json
+### Test 1: Controlla repo.json
+
+```bash
+curl https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/repo.json
+```
+
+Dovresti vedere JSON con la configurazione del repository.
+
+### Test 2: Controlla plugins.json
 
 ```bash
 curl https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugins.json | jq
@@ -136,7 +141,7 @@ curl https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/plugin
 
 Dovresti vedere JSON con array di plugin.
 
-### Test 2: Controlla i file .cs3
+### Test 3: Controlla i file .cs3
 
 ```bash
 curl -I https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorldHD.cs3
@@ -144,7 +149,7 @@ curl -I https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/Ani
 
 Dovresti vedere `200 OK`.
 
-### Test 3: CloudStream App
+### Test 4: CloudStream App
 
 1. Aggiungi repository come sopra
 2. Vai in **Estensioni** → **Tutte**
