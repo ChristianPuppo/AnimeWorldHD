@@ -1,0 +1,349 @@
+[
+    {
+        "iconUrl": "https://altadefinizionegratis.group/templates/Dark/img/favicon.ico",
+        "fileHash": "sha256-f3a8421a922e91684150a26e4b492fd3f48263fc6c6503842089e924ce473be8",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 23388,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Documentary"
+        ],
+        "version": 4,
+        "internalName": "AltaDefinizione",
+        "description": "Movies and Tv Series from Altadefinizione",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AltaDefinizione.cs3",
+        "name": "AltaDefinizione"
+    },
+    {
+        "iconUrl": "https://www.animeunity.so/apple-touch-icon.png",
+        "fileHash": "sha256-0d6bc9b0be5238828118fb0845b7dc8ebd92edf7033ed324a83004a194f17146",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 37199,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 15,
+        "internalName": "AnimeUnity",
+        "description": "Anime from AnimeUnity",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeUnity.cs3",
+        "name": "AnimeUnity"
+    },
+    {
+        "iconUrl": "https://static.animeworld.ac/assets/images/favicon/android-icon-192x192.png?s",
+        "fileHash": "sha256-8689cdb0b4859c9298c651ba3c1e3cd229a7c7eee6001de67b2317d99e243f2d",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 40476,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 16,
+        "internalName": "AnimeWorld",
+        "description": "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorld.cs3",
+        "name": "AnimeWorld"
+    },
+    {
+        "iconUrl": "https://static.animeworld.ac/assets/images/favicon/android-icon-192x192.png?s",
+        "fileHash": "sha256-b7ba7622fa81bdf60a6a356936e62a21a6b28451907aeeed30f0db6150b28c91",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 48966,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "doGior",
+            "Chruis"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA"
+        ],
+        "version": 1,
+        "internalName": "AnimeWorldHD",
+        "description": "Anime from AnimeWorld with High Quality metadata from AniList. Powered by AniList GraphQL API for premium banners and posters.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/AnimeWorldHD.cs3",
+        "name": "AnimeWorldHD"
+    },
+    {
+        "iconUrl": "https://static-cdn.arte.tv/replay/favicons/favicon-194x194.png",
+        "fileHash": "sha256-3f9d80cd446e659fbc05aea0bd328aca87cce31ab174506636bdbb5cfad37957",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 32600,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Documentary"
+        ],
+        "version": 2,
+        "internalName": "Arte",
+        "description": "Magazine shows, concerts, documentaries, and more: the European culture channel's programmes available to stream free of charge on arte.tv",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/Arte.cs3",
+        "name": "Arte"
+    },
+    {
+        "iconUrl": "https://guarda.direttecommunity.online/templates/calciostreaming1/images/icons/apple-touch-icon.png",
+        "fileHash": "sha256-3ac865e5e1875eaa9e639d813c1ed953bb2bc2755066ca652f4868b0efdfe54e",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 14454,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "Gian-Fr",
+            "Adippe",
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 6,
+        "internalName": "CalcioStreaming",
+        "description": "Live streams from the CalcioStreaming. Forked from the CalcioStreaming plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/CalcioStreaming.cs3",
+        "name": "CalcioStreaming"
+    },
+    {
+        "iconUrl": "https://cb01.uno/apple-icon-180x180px.png",
+        "fileHash": "sha256-add81c9735d0e5d9f629007a95d1b329a4bc1eb61e8a09c6be0774fd4d05d704",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 34939,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Cartoon"
+        ],
+        "version": 13,
+        "internalName": "CB01",
+        "description": "Movies and Shows from CB01",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/CB01.cs3",
+        "name": "CB01"
+    },
+    {
+        "iconUrl": "https://ilcorsaronero.link/assets/images/icon-dca0f2c8f780ee155024c67b63f5ebc5.svg",
+        "fileHash": "sha256-3f811b5eb00faa218c9d23d486496816b4901ab21ec8e4151c545eea0b03e858",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 30663,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "Torrent"
+        ],
+        "version": 4,
+        "internalName": "CorsaroNero",
+        "description": "Torrents from Il Corsaro Nero. If something doesn't work the torrent has probably not enough seeds",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/CorsaroNero.cs3",
+        "name": "CorsaroNero"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/doGior/doGiorsHadEnough/refs/heads/master/DaddyLive/live-streaming.png",
+        "fileHash": "sha256-445ce95862f42a6ae17893749d68edb1433ff0a9398685e0d97c39070177c78f",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 34495,
+        "status": 1,
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 16,
+        "internalName": "DaddyLive",
+        "description": "Live TV from DaddyLive. You might need a VPN",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/DaddyLive.cs3",
+        "name": "DaddyLive"
+    },
+    {
+        "iconUrl": "https://huhu.to/favicon.ico",
+        "fileHash": "sha256-0714d9f1c6435c54d0c9975c8fe5c378d66625bcb1228adf3900e5853b51483a",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 23857,
+        "status": 1,
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 3,
+        "internalName": "Huhu",
+        "description": "TV channels from huhu.to",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/Huhu.cs3",
+        "name": "Huhu"
+    },
+    {
+        "iconUrl": "https://www.shutterstock.com/image-vector/iptv-vector-line-icon-ip-260nw-1841427610.jpg",
+        "fileHash": "sha256-1eee3f37056015fdc7476b89352949512a80ef76689ecca8591a5752a69027f0",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 37981,
+        "status": 1,
+        "authors": [
+            "anhdaden",
+            "dogior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 1,
+        "internalName": "IPTV",
+        "description": "General IPTV player. Add a list in the settings and you'll see it in the plugins list in the home",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/IPTV.cs3",
+        "name": "IPTV"
+    },
+    {
+        "iconUrl": "https://nebula.tv/apple-touch-icon.png",
+        "fileHash": "sha256-97f7a9a7e8dc7b2a0351803e62ed118c0520e0565b808e5702a2df8643bb2ca8",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 22041,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Others"
+        ],
+        "version": 1,
+        "internalName": "Nebula",
+        "description": "Plugin to watch the free videos and ONLY THE FREE VIDEOS from nebula.tv",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/Nebula.cs3",
+        "name": "Nebula"
+    },
+    {
+        "iconUrl": "https://eu.simkl.in/img_favicon/v2/favicon-192x192.png",
+        "fileHash": "sha256-44563d78a66bb56791d6b83db1e64dec4f35294d3d0b4cd8da352e775cfb93f7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 9203,
+        "status": 1,
+        "language": "en",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "AnimeMovie",
+            "Anime",
+            "OVA",
+            "TvSeries",
+            "Movie",
+            "Documentary",
+            "Cartoon"
+        ],
+        "version": 1,
+        "internalName": "SimklProvider",
+        "description": "No Streaming. This is just to open the info page of a show from the simkl library",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/SimklProvider.cs3",
+        "name": "SimklProvider"
+    },
+    {
+        "iconUrl": "https://streamingcommunityz.moe/apple-touch-icon.png?v=2",
+        "fileHash": "sha256-ee18c464f80cbc4ff0dd8349e57b3b5a0479b77b40cafd561947326d414215e7",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 47379,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "TvSeries",
+            "Movie",
+            "Documentary",
+            "Cartoon"
+        ],
+        "version": 40,
+        "internalName": "StreamingCommunity",
+        "description": "StreamingCommunity. Include auto-redirect tracker. In caso estremo di blocco totale, cerca nell'app: !!sc-domain https://nuovo.sito e riavvia l'app.",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/StreamingCommunity.cs3",
+        "name": "StreamingCommunity"
+    },
+    {
+        "iconUrl": "https://torrentio.strem.fun/images/logo_v1.png",
+        "fileHash": "sha256-3819447508d7f1b393e83b7633bf09ef7f6f447dea293f21eedf3e82ae1e95b9",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 41132,
+        "status": 1,
+        "language": "it",
+        "authors": [
+            "doGior"
+        ],
+        "tvTypes": [
+            "Movie",
+            "TvSeries",
+            "Torrent",
+            "Documentary"
+        ],
+        "version": 4,
+        "internalName": "Torrentio",
+        "description": "Torrents from Torrentio",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/Torrentio.cs3",
+        "name": "Torrentio"
+    },
+    {
+        "iconUrl": "https://raw.githubusercontent.com/doGior/doGiorsHadEnough/refs/heads/master/TV/television.png",
+        "fileHash": "sha256-413ae8dc0d003f0dc145014dcd6ba2b41a078ef7091afa878cb90e2c9516f819",
+        "apiVersion": 1,
+        "repositoryUrl": "https://github.com/ChristianPuppo/AnimeWorldHD",
+        "fileSize": 28717,
+        "status": 1,
+        "authors": [
+            "Gian-Fr",
+            "Adippe",
+            "doGior"
+        ],
+        "tvTypes": [
+            "Live"
+        ],
+        "version": 3,
+        "internalName": "TV",
+        "description": "Live streams from the Free TV github repository. Forked from the Free-TV plugin in the ItalianProvider repo",
+        "url": "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/builds/TV.cs3",
+        "name": "TV"
+    }
+]
