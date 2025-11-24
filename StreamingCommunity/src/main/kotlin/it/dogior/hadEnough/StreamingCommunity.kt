@@ -110,6 +110,9 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
+        if (headers["Cookie"].isNullOrEmpty()) {
+            setupHeaders()
+        }
         var url = mainUrl.substringBeforeLast("/") + "/api" +
                 request.data.substringAfter(mainUrl)
         val params = mutableMapOf("lang" to "it")
@@ -138,7 +141,7 @@ class StreamingCommunity : MainAPI() {
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        val response = app.get(url, params = params)
+        val response = app.get(url, params = params, headers = headers)
         val responseString = response.body.string()
         val responseJson = parseJson<Section>(responseString)
 
