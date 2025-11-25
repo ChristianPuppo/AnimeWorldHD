@@ -1,12 +1,12 @@
 // use an integer for version numbers
-version = 36
+version = 37
 
 
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
     description = "TV Shows and Movies from StreamingCommunity (now StreamingUnity)"
-    authors = listOf("doGior", "Chruis")
+    authors = listOf("doGior")
 
     /**
     * Status int as the following:
@@ -17,8 +17,9 @@ cloudstream {
     * */
     status = 1
     tvTypes = listOf(
-        "Movie",
         "TvSeries",
+        "Movie",
+        "Documentary",
         "Cartoon"
     )
 
@@ -26,7 +27,4 @@ cloudstream {
     language = "it"
 
     iconUrl = "https://streamingunity.co/apple-touch-icon.png?v=2"
-}
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
 }

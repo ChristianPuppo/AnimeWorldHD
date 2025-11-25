@@ -1,5 +1,6 @@
 package it.dogior.hadEnough
 
+import com.lagradost.api.Log
 import com.lagradost.cloudstream3.APIHolder.capitalize
 import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.SearchResponse
@@ -33,9 +34,10 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class StreamingCommunity : MainAPI() {
-    override var mainUrl = "https://streamingunity.co"
-    override var name = "StreamingCommunity"
-    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon)
+    override var mainUrl = Companion.mainUrl
+    override var name = Companion.name
+    override var supportedTypes =
+        setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
     override var lang = "it"
     override val hasMainPage = true
 
@@ -47,16 +49,34 @@ class StreamingCommunity : MainAPI() {
             "X-Inertia-Version" to inertiaVersion,
             "X-Requested-With" to "XMLHttpRequest",
         ).toMutableMap()
+        val mainUrl = "https://streamingunity.co/it"
+        var name = "StreamingCommunity"
+        val TAG = "SCommunity"
     }
 
-    override val mainPage = mainPageOf(
-        "$mainUrl/it/browse/top10" to "Top 10 di oggi",
-        "$mainUrl/it/browse/trending" to "I Titoli Del Momento",
-        "$mainUrl/it/browse/latest" to "Aggiunti di Recente",
+    private val sectionNamesList = mainPageOf(
+        "$mainUrl/browse/top10" to "Top 10 di oggi",
+        "$mainUrl/browse/trending" to "I Titoli Del Momento",
+        "$mainUrl/browse/latest" to "Aggiunti di Recente",
+        "$mainUrl/browse/genre?g=Animation" to "Animazione",
+        "$mainUrl/browse/genre?g=Adventure" to "Avventura",
+        "$mainUrl/browse/genre?g=Action" to "Azione",
+        "$mainUrl/browse/genre?g=Comedy" to "Commedia",
+        "$mainUrl/browse/genre?g=Crime" to "Crime",
+        "$mainUrl/browse/genre?g=Documentary" to "Documentario",
+        "$mainUrl/browse/genre?g=Drama" to "Dramma",
+        "$mainUrl/browse/genre?g=Family" to "Famiglia",
+        "$mainUrl/browse/genre?g=Science Fiction" to "Fantascienza",
+        "$mainUrl/browse/genre?g=Fantasy" to "Fantasy",
+        "$mainUrl/browse/genre?g=Horror" to "Horror",
+        "$mainUrl/browse/genre?g=Reality" to "Reality",
+        "$mainUrl/browse/genre?g=Romance" to "Romance",
+        "$mainUrl/browse/genre?g=Thriller" to "Thriller",
     )
+    override val mainPage = sectionNamesList
 
     private suspend fun setupHeaders() {
-        val response = app.get("$mainUrl/it/archive")
+        val response = app.get("$mainUrl/archive")
         val cookies = response.cookies
         headers["Cookie"] = cookies.map { it.key + "=" + it.value }.joinToString(separator = "; ")
 //        Log.d("Inertia", response.headers.toString())
@@ -90,15 +110,24 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        val path = request.data.substringAfter("$mainUrl/it")
-        var url = "$mainUrl/api$path"
+        var url = mainUrl.substringBeforeLast("/") + "/api" +
+                request.data.substringAfter(mainUrl)
         val params = mutableMapOf("lang" to "it")
 
         val section = request.data.substringAfterLast("/")
         when (section) {
-            "trending", "latest", "top10" -> {
-                // Standard sections
+            "trending" -> {
+//                Log.d(TAG, "TRENDING")
             }
+
+            "latest" -> {
+//                Log.d(TAG, "LATEST")
+            }
+
+            "top10" -> {
+//                Log.d(TAG, "TOP10")
+            }
+
             else -> {
                 val genere = url.substringAfterLast('=')
                 url = url.substringBeforeLast('?')
@@ -109,10 +138,10 @@ class StreamingCommunity : MainAPI() {
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-
         val response = app.get(url, params = params)
         val responseString = response.body.string()
         val responseJson = parseJson<Section>(responseString)
+
         val titlesList = searchResponseBuilder(responseJson.titles)
 
         val hasNextPage =
@@ -130,21 +159,26 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String): List<SearchResponse> {
-        val searchUrl = "$mainUrl/api/search"
-        val params = mapOf("q" to query, "lang" to "it")
-        val response = app.get(searchUrl, params = params).body.string()
-        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-        return searchResponseBuilder(result.data)
+        val url = "$mainUrl/search"
+        val params = mapOf("q" to query)
+
+        if (headers["Cookie"].isNullOrEmpty()) {
+            setupHeaders()
+        }
+        val response = app.get(url, params = params, headers = headers).body.string()
+        val result = parseJson<InertiaResponse>(response)
+
+        return searchResponseBuilder(result.props.titles!!)
     }
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        val searchUrl = "$mainUrl/api/search"
+        val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        val response = app.get(searchUrl, params = params).body.string()
+        val response = app.get(searchUrl, params = params, headers = headers).body.string()
         val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
         val hasNext = (page < 3) || (page < result.lastPage)
         return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
@@ -212,7 +246,7 @@ class StreamingCommunity : MainAPI() {
             return tvShow
         } else {
             val data = LoadData(
-                "$mainUrl/it/iframe/${title.id}&canPlayFHD=1",
+                "$mainUrl/iframe/${title.id}&canPlayFHD=1",
                 "movie",
                 title.tmdbId
             )
@@ -251,7 +285,10 @@ class StreamingCommunity : MainAPI() {
         if (!url.contains(mainUrl)) {
             val replacingValue =
                 if (url.contains("/it/")) mainUrl.toHttpUrl().host else mainUrl.toHttpUrl().host + "/it"
-            url.replace(url.toHttpUrl().host, replacingValue)
+            val actualUrl = url.replace(url.toHttpUrl().host, replacingValue)
+
+            Log.d("$TAG:UrlFix", "Old: $url\nNew: $actualUrl")
+            actualUrl
         } else {
             url
         }
@@ -268,7 +305,7 @@ class StreamingCommunity : MainAPI() {
                 if (inertiaVersion == "") {
                     setupHeaders()
                 }
-                val url = "$mainUrl/it/titles/${title.id}-${title.slug}/season-${season.number}"
+                val url = "$mainUrl/titles/${title.id}-${title.slug}/season-${season.number}"
                 val obj =
                     parseJson<InertiaResponse>(app.get(url, headers = headers).body.string())
                 responseEpisodes.addAll(obj.props.loadedSeason?.episodes!!)
@@ -276,7 +313,7 @@ class StreamingCommunity : MainAPI() {
             responseEpisodes.forEach { ep ->
 
                 val loadData = LoadData(
-                    "$mainUrl/it/iframe/${title.id}?episode_id=${ep.id}&canPlayFHD=1",
+                    "$mainUrl/iframe/${title.id}?episode_id=${ep.id}&canPlayFHD=1",
                     type = "tv",
                     tmdbId = title.tmdbId,
                     seasonNumber = season.number,
@@ -303,6 +340,7 @@ class StreamingCommunity : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
+        Log.d(TAG, "Load Data : $data")
         if (data.isEmpty()) return false
         val loadData = parseJson<LoadData>(data)
 
@@ -311,7 +349,7 @@ class StreamingCommunity : MainAPI() {
 
         VixCloudExtractor().getUrl(
             url = iframeSrc,
-            referer = "$mainUrl/",
+            referer = mainUrl.substringBeforeLast("it"),
             subtitleCallback = subtitleCallback,
             callback = callback
         )
