@@ -33,10 +33,9 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class StreamingCommunity : MainAPI() {
-    override var mainUrl = Companion.mainUrl
-    override var name = Companion.name
-    override var supportedTypes =
-        setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon)
+    override var mainUrl = "https://streamingunity.co"
+    override var name = "StreamingCommunity"
+    override val supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon)
     override var lang = "it"
     override val hasMainPage = true
 
@@ -48,8 +47,6 @@ class StreamingCommunity : MainAPI() {
             "X-Inertia-Version" to inertiaVersion,
             "X-Requested-With" to "XMLHttpRequest",
         ).toMutableMap()
-        val mainUrl = "https://streamingunity.co"
-        var name = "StreamingCommunity"
     }
 
     override val mainPage = mainPageOf(
