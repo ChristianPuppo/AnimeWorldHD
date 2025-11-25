@@ -1,6 +1,5 @@
 package it.dogior.hadEnough
 
-import com.lagradost.api.Log
 import com.lagradost.cloudstream3.APIHolder.capitalize
 import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.SearchResponse
@@ -49,19 +48,18 @@ class StreamingCommunity : MainAPI() {
             "X-Inertia-Version" to inertiaVersion,
             "X-Requested-With" to "XMLHttpRequest",
         ).toMutableMap()
-        val mainUrl = "https://streamingunity.co/it"
+        val mainUrl = "https://streamingunity.co"
         var name = "StreamingCommunity"
-        val TAG = "SCommunity"
     }
 
     override val mainPage = mainPageOf(
-        "$mainUrl/browse/top10" to "Top 10 di oggi",
-        "$mainUrl/browse/trending" to "I Titoli Del Momento",
-        "$mainUrl/browse/latest" to "Aggiunti di Recente",
+        "$mainUrl/it/browse/top10" to "Top 10 di oggi",
+        "$mainUrl/it/browse/trending" to "I Titoli Del Momento",
+        "$mainUrl/it/browse/latest" to "Aggiunti di Recente",
     )
 
     private suspend fun setupHeaders() {
-        val response = app.get("$mainUrl/archive")
+        val response = app.get("$mainUrl/it/archive")
         val cookies = response.cookies
         headers["Cookie"] = cookies.map { it.key + "=" + it.value }.joinToString(separator = "; ")
 //        Log.d("Inertia", response.headers.toString())
@@ -95,113 +93,64 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        return try {
-            Log.d(TAG, "=== getMainPage START === page=$page, request=${request.name}")
-        
-        var url = mainUrl.substringBeforeLast("/") + "/api" +
-                request.data.substringAfter(mainUrl)
+        val path = request.data.substringAfter("$mainUrl/it")
+        var url = "$mainUrl/api$path"
         val params = mutableMapOf("lang" to "it")
 
         val section = request.data.substringAfterLast("/")
         when (section) {
-            "trending" -> {
-                Log.d(TAG, "Section: TRENDING")
+            "trending", "latest", "top10" -> {
+                // Standard sections
             }
-
-            "latest" -> {
-                Log.d(TAG, "Section: LATEST")
-            }
-
-            "top10" -> {
-                Log.d(TAG, "Section: TOP10")
-            }
-
             else -> {
                 val genere = url.substringAfterLast('=')
                 url = url.substringBeforeLast('?')
                 params["g"] = genere
-                Log.d(TAG, "Section: GENRE - $genere")
             }
         }
 
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        
-        Log.d(TAG, "Calling API: $url with params: $params")
+
         val response = app.get(url, params = params)
         val responseString = response.body.string()
-        Log.d(TAG, "Response length: ${responseString.length}")
-        
         val responseJson = parseJson<Section>(responseString)
-        Log.d(TAG, "Parsed titles: ${responseJson.titles.size}")
-
         val titlesList = searchResponseBuilder(responseJson.titles)
-        Log.d(TAG, "Built search responses: ${titlesList.size}")
 
         val hasNextPage =
             response.okhttpResponse.request.url.queryParameter("offset")?.toIntOrNull()
                 ?.let { it < 120 } ?: true && titlesList.size == 60
 
-            Log.d(TAG, "Returning HomePageResponse with ${titlesList.size} items, hasNextPage: $hasNextPage")
-            newHomePageResponse(
-                HomePageList(
-                    name = request.name,
-                    list = titlesList,
-                    isHorizontalImages = false
-                ), hasNextPage
-            )
-        } catch (e: Exception) {
-            Log.e(TAG, "=== getMainPage ERROR === ${e.message}")
-            e.printStackTrace()
-            throw e
-        }
+        return newHomePageResponse(
+            HomePageList(
+                name = request.name,
+                list = titlesList,
+                isHorizontalImages = false
+            ), hasNextPage
+        )
     }
 
 
     override suspend fun search(query: String): List<SearchResponse> {
-        return try {
-            Log.d(TAG, "=== search() START === query=$query")
-            val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
-            val params = mapOf("q" to query, "lang" to "it")
-            
-            Log.d(TAG, "Calling search API: $searchUrl")
-            val response = app.get(searchUrl, params = params).body.string()
-            Log.d(TAG, "Search response length: ${response.length}")
-            
-            val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-            Log.d(TAG, "Parsed search results: ${result.data.size}")
-
-            val results = searchResponseBuilder(result.data)
-            Log.d(TAG, "Returning ${results.size} search results")
-            results
-        } catch (e: Exception) {
-            Log.e(TAG, "=== search() ERROR === ${e.message}")
-            e.printStackTrace()
-            emptyList()
-        }
+        val searchUrl = "$mainUrl/api/search"
+        val params = mapOf("q" to query, "lang" to "it")
+        val response = app.get(searchUrl, params = params).body.string()
+        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+        return searchResponseBuilder(result.data)
     }
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        return try {
-            Log.d(TAG, "=== search(paginated) START === query=$query, page=$page")
-            val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
-            val params = mutableMapOf("q" to query, "lang" to "it")
-            if (page > 0) {
-                params["offset"] = ((page - 1) * 60).toString()
-            }
-            Log.d(TAG, "Calling search API: $searchUrl with params: $params")
-            val response = app.get(searchUrl, params = params).body.string()
-            val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-            Log.d(TAG, "Search results: ${result.data.size}, current page: ${result.currentPage}, last page: ${result.lastPage}")
-            val hasNext = (page < 3) || (page < result.lastPage)
-            newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
-        } catch (e: Exception) {
-            Log.e(TAG, "=== search(paginated) ERROR === ${e.message}")
-            e.printStackTrace()
-            newSearchResponseList(emptyList())
+        val searchUrl = "$mainUrl/api/search"
+        val params = mutableMapOf("q" to query, "lang" to "it")
+        if (page > 0) {
+            params["offset"] = ((page - 1) * 60).toString()
         }
+        val response = app.get(searchUrl, params = params).body.string()
+        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
+        val hasNext = (page < 3) || (page < result.lastPage)
+        return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
     }
 
     private suspend fun getPoster(title: TitleProp): String? {
@@ -266,7 +215,7 @@ class StreamingCommunity : MainAPI() {
             return tvShow
         } else {
             val data = LoadData(
-                "$mainUrl/iframe/${title.id}&canPlayFHD=1",
+                "$mainUrl/it/iframe/${title.id}&canPlayFHD=1",
                 "movie",
                 title.tmdbId
             )
@@ -305,10 +254,7 @@ class StreamingCommunity : MainAPI() {
         if (!url.contains(mainUrl)) {
             val replacingValue =
                 if (url.contains("/it/")) mainUrl.toHttpUrl().host else mainUrl.toHttpUrl().host + "/it"
-            val actualUrl = url.replace(url.toHttpUrl().host, replacingValue)
-
-            Log.d("$TAG:UrlFix", "Old: $url\nNew: $actualUrl")
-            actualUrl
+            url.replace(url.toHttpUrl().host, replacingValue)
         } else {
             url
         }
@@ -325,7 +271,7 @@ class StreamingCommunity : MainAPI() {
                 if (inertiaVersion == "") {
                     setupHeaders()
                 }
-                val url = "$mainUrl/titles/${title.id}-${title.slug}/season-${season.number}"
+                val url = "$mainUrl/it/titles/${title.id}-${title.slug}/season-${season.number}"
                 val obj =
                     parseJson<InertiaResponse>(app.get(url, headers = headers).body.string())
                 responseEpisodes.addAll(obj.props.loadedSeason?.episodes!!)
@@ -333,7 +279,7 @@ class StreamingCommunity : MainAPI() {
             responseEpisodes.forEach { ep ->
 
                 val loadData = LoadData(
-                    "$mainUrl/iframe/${title.id}?episode_id=${ep.id}&canPlayFHD=1",
+                    "$mainUrl/it/iframe/${title.id}?episode_id=${ep.id}&canPlayFHD=1",
                     type = "tv",
                     tmdbId = title.tmdbId,
                     seasonNumber = season.number,
@@ -360,7 +306,6 @@ class StreamingCommunity : MainAPI() {
         subtitleCallback: (SubtitleFile) -> Unit,
         callback: (ExtractorLink) -> Unit
     ): Boolean {
-        Log.d(TAG, "Load Data : $data")
         if (data.isEmpty()) return false
         val loadData = parseJson<LoadData>(data)
 
@@ -369,7 +314,7 @@ class StreamingCommunity : MainAPI() {
 
         VixCloudExtractor().getUrl(
             url = iframeSrc,
-            referer = mainUrl.substringBeforeLast("it"),
+            referer = "$mainUrl/",
             subtitleCallback = subtitleCallback,
             callback = callback
         )
