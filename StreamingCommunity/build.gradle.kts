@@ -29,6 +29,3 @@ cloudstream {
     iconUrl = "https://streamingcommunityz.pink/apple-touch-icon.png?v=2"
 }
 
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")
-}
