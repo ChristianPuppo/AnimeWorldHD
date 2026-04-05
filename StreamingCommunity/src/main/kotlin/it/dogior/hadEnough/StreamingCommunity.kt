@@ -34,7 +34,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class StreamingCommunity : MainAPI() {
-    override var mainUrl = Companion.mainUrl
+    override var mainUrl = Companion.mainUrl + "it"
     override var name = Companion.name
     override var supportedTypes =
         setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
@@ -49,7 +49,7 @@ class StreamingCommunity : MainAPI() {
             "X-Inertia-Version" to inertiaVersion,
             "X-Requested-With" to "XMLHttpRequest",
         ).toMutableMap()
-        val mainUrl = "https://streamingcommunityz.love/it"
+        val mainUrl = "https://streamingcommunityz.pink/"
         var name = "StreamingCommunity"
         val TAG = "SCommunity"
     }
@@ -116,16 +116,9 @@ class StreamingCommunity : MainAPI() {
 
         val section = request.data.substringAfterLast("/")
         when (section) {
-            "trending" -> {
-//                Log.d(TAG, "TRENDING")
-            }
-
-            "latest" -> {
-//                Log.d(TAG, "LATEST")
-            }
-
+            "trending",
+            "latest",
             "top10" -> {
-//                Log.d(TAG, "TOP10")
             }
 
             else -> {
@@ -173,7 +166,7 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
-        val searchUrl = "${mainUrl.replace("/it", "")}/api/search"
+        val searchUrl = "${mainUrl.replace("/it", "").replace("/en", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
@@ -284,7 +277,7 @@ class StreamingCommunity : MainAPI() {
     private fun getActualUrl(url: String) =
         if (!url.contains(mainUrl)) {
             val replacingValue =
-                if (url.contains("/it/")) mainUrl.toHttpUrl().host else mainUrl.toHttpUrl().host + "/it"
+                if (url.contains("/it/") || url.contains("/en/")) mainUrl.toHttpUrl().host else mainUrl.toHttpUrl().host + "/it"
             val actualUrl = url.replace(url.toHttpUrl().host, replacingValue)
 
             Log.d("$TAG:UrlFix", "Old: $url\nNew: $actualUrl")
@@ -317,7 +310,8 @@ class StreamingCommunity : MainAPI() {
                     type = "tv",
                     tmdbId = title.tmdbId,
                     seasonNumber = season.number,
-                    episodeNumber = ep.number)
+                    episodeNumber = ep.number
+                )
                 episodeList.add(
                     newEpisode(loadData.toJson()) {
                         this.name = ep.name
@@ -349,14 +343,14 @@ class StreamingCommunity : MainAPI() {
 
         VixCloudExtractor().getUrl(
             url = iframeSrc,
-            referer = mainUrl.substringBeforeLast("it"),
+            referer = mainUrl,
             subtitleCallback = subtitleCallback,
             callback = callback
         )
 
-        val vixsrcUrl = if(loadData.type == "movie"){
+        val vixsrcUrl = if (loadData.type == "movie") {
             "https://vixsrc.to/movie/${loadData.tmdbId}"
-        } else{
+        } else {
             "https://vixsrc.to/tv/${loadData.tmdbId}/${loadData.seasonNumber}/${loadData.episodeNumber}"
         }
 
