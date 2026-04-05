@@ -53,13 +53,14 @@ subprojects {
         }
 
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "1.8" // Required
+            compilerOptions {
+                jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_1_8) // Required
                 // Disables some unnecessary features
-                freeCompilerArgs = freeCompilerArgs +
-                        "-Xno-call-assertions" +
-                        "-Xno-param-assertions" +
-                        "-Xno-receiver-assertions"
+                freeCompilerArgs.addAll(
+                    "-Xno-call-assertions",
+                    "-Xno-param-assertions",
+                    "-Xno-receiver-assertions"
+                )
             }
         }
     }
@@ -83,5 +84,5 @@ subprojects {
 }
 
 task<Delete>("clean") {
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
