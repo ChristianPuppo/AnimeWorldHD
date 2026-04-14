@@ -12,3 +12,6 @@
 !gradle.properties
 !gradle/wrapper/gradle-wrapper.properties
 .vscode
+*.zip
+android-sdk/
+kotlinc/

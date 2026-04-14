@@ -1,11 +1,11 @@
 // use an integer for version numbers
-version = 39
+version = 40
 
 
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "TV Shows and Movies from StreamingCommunity (now StreamingUnity)"
+    description = "StreamingCommunity. Include auto-redirect tracker. In caso estremo di blocco totale, cerca nell'app: !!sc-domain https://nuovo.sito e riavvia l'app."
     authors = listOf("doGior")
 
     /**
@@ -26,6 +26,6 @@ cloudstream {
     requiresResources = false
     language = "it"
 
-    iconUrl = "https://streamingcommunityz.pink/apple-touch-icon.png?v=2"
+    iconUrl = "https://streamingcommunityz.moe/apple-touch-icon.png?v=2"
 }
 

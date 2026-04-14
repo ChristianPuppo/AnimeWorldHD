@@ -34,14 +34,57 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 
 
 class StreamingCommunity : MainAPI() {
-    override var mainUrl = Companion.mainUrl + "it"
-    override var name = Companion.name
-    override var supportedTypes =
-        setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
-    override var lang = "it"
-    override val hasMainPage = true
-
     companion object {
+        var appContext: android.content.Context? = null
+        var isDomainResolved = false
+        var resolvedDomain = "https://streamingcommunityz.moe"
+
+        suspend fun updateDomain() {
+            if (isDomainResolved) return
+
+            // 0. Manual Override via SharedPreferences
+            try {
+                val prefs = appContext?.getSharedPreferences("SCommunityPref", android.content.Context.MODE_PRIVATE)
+                val customDomain = prefs?.getString("custom_domain", null)
+                if (!customDomain.isNullOrBlank()) {
+                    resolvedDomain = customDomain.trimEnd('/')
+                    isDomainResolved = true
+                    Log.d(TAG, "Domain resolved from Custom Prefs: $resolvedDomain")
+                    return
+                }
+            } catch (e: Exception) {
+                // Ignore
+            }
+
+            try {
+                // 1. Remote JSON Config Fetch
+                val configUrl = "https://raw.githubusercontent.com/ChristianPuppo/doGiorsHadEnough/main/domains.json"
+                val responseOpt = app.get(configUrl, timeout = 3)
+                if (responseOpt.isSuccessful) {
+                    val config = parseJson<Map<String, String>>(responseOpt.text)
+                    config["streamingcommunity"]?.let {
+                        resolvedDomain = it.trimEnd('/')
+                        isDomainResolved = true
+                        Log.d(TAG, "Domain resolved from Config: $resolvedDomain")
+                        return
+                    }
+                }
+            } catch (e: Exception) {
+                // Config fallback
+            }
+
+            try {
+                // 2. HTTP 301 Redirect Chasing
+                val probe = app.get(resolvedDomain)
+                val finalUrl = probe.okhttpResponse.request.url
+                resolvedDomain = "https://" + finalUrl.host
+                isDomainResolved = true
+                Log.d(TAG, "Domain resolved via Redirect: $resolvedDomain")
+            } catch (e: Exception) {
+                isDomainResolved = true
+            }
+        }
+
         private var inertiaVersion = ""
         private val headers = mapOf(
             "Cookie" to "",
@@ -49,10 +92,18 @@ class StreamingCommunity : MainAPI() {
             "X-Inertia-Version" to inertiaVersion,
             "X-Requested-With" to "XMLHttpRequest",
         ).toMutableMap()
-        val mainUrl = "https://streamingcommunityz.pink/"
         var name = "StreamingCommunity"
         val TAG = "SCommunity"
     }
+
+    override var mainUrl: String
+        get() = "$resolvedDomain/it"
+        set(value) { resolvedDomain = value.substringBefore("/it") }
+
+    override var name = "StreamingCommunity"
+    override var supportedTypes = setOf(TvType.Movie, TvType.TvSeries, TvType.Cartoon, TvType.Documentary)
+    override var lang = "it"
+    override val hasMainPage = true
 
     private val sectionNamesList = mainPageOf(
         "$mainUrl/browse/top10" to "Top 10 di oggi",
@@ -76,12 +127,11 @@ class StreamingCommunity : MainAPI() {
     override val mainPage = sectionNamesList
 
     private suspend fun setupHeaders() {
+        Companion.updateDomain() // Assicurati che il dominio sia risolto
         val response = app.get("$mainUrl/archive")
         val cookies = response.cookies
         headers["Cookie"] = cookies.map { it.key + "=" + it.value }.joinToString(separator = "; ")
-//        Log.d("Inertia", response.headers.toString())
         val page = response.document
-//        Log.d("Inertia", page.toString())
         val inertiaPageObject = page.select("#app").attr("data-page")
         inertiaVersion = inertiaPageObject
             .substringAfter("\"version\":\"")
@@ -90,7 +140,7 @@ class StreamingCommunity : MainAPI() {
     }
 
     private fun searchResponseBuilder(listJson: List<Title>): List<SearchResponse> {
-        val domain = mainUrl.substringAfter("://").substringBeforeLast("/")
+        val domain = mainUrl.substringAfter("://").substringBeforeLast("/") // "streamingcommunityz.moe"
         val list: List<SearchResponse> =
             listJson.filter { it.type == "movie" || it.type == "tv" }.map { title ->
                 val url = "$mainUrl/titles/${title.id}-${title.slug}"
@@ -110,22 +160,15 @@ class StreamingCommunity : MainAPI() {
 
     //Get the Homepage
     override suspend fun getMainPage(page: Int, request: MainPageRequest): HomePageResponse {
-        var url = mainUrl.substringBeforeLast("/") + "/api" +
-                request.data.substringAfter(mainUrl)
-        val params = mutableMapOf("lang" to "it")
+        Companion.updateDomain()
 
         val section = request.data.substringAfterLast("/")
-        when (section) {
-            "trending",
-            "latest",
-            "top10" -> {
-            }
+        var url = "$resolvedDomain/api/browse/$section"
+        val params = mutableMapOf("lang" to "it")
 
-            else -> {
-                val genere = url.substringAfterLast('=')
-                url = url.substringBeforeLast('?')
-                params["g"] = genere
-            }
+        if (section.startsWith("genre?g=")) {
+            url = "$resolvedDomain/api/browse/genre"
+            params["g"] = section.substringAfter("g=")
         }
 
         if (page > 0) {
@@ -152,6 +195,20 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String): List<SearchResponse> {
+        if (query.startsWith("!!sc-domain ")) {
+            val customDomain = query.substringAfter("!!sc-domain ").trim()
+            Companion.appContext?.getSharedPreferences("SCommunityPref", android.content.Context.MODE_PRIVATE)
+                ?.edit()?.putString("custom_domain", customDomain)?.apply()
+            
+            // Return dummy successful result
+            return listOf(
+                newMovieSearchResponse("✅ Dominio Aggiornato a: $customDomain. Riavvia l'app.", customDomain) {
+                    posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png" 
+                }
+            )
+        }
+
+        Companion.updateDomain()
         val url = "$mainUrl/search"
         val params = mapOf("q" to query)
 
@@ -166,6 +223,7 @@ class StreamingCommunity : MainAPI() {
 
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
+        Companion.updateDomain()
         val searchUrl = "${mainUrl.replace("/it", "").replace("/en", "")}/api/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
@@ -191,6 +249,7 @@ class StreamingCommunity : MainAPI() {
 
     // This function gets called when you enter the page/show
     override suspend fun load(url: String): LoadResponse {
+        Companion.updateDomain()
         val actualUrl = getActualUrl(url)
         if (headers["Cookie"].isNullOrEmpty()) {
             setupHeaders()
