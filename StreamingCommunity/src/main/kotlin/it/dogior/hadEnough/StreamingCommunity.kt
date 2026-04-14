@@ -163,22 +163,28 @@ class StreamingCommunity : MainAPI() {
         Companion.updateDomain()
 
         val section = request.data.substringAfterLast("/")
-        var url = "$resolvedDomain/api/browse/$section"
+        var url = "$resolvedDomain/it/browse/$section"
         val params = mutableMapOf("lang" to "it")
 
         if (section.startsWith("genre?g=")) {
-            url = "$resolvedDomain/api/browse/genre"
+            url = "$resolvedDomain/it/browse/genre"
             params["g"] = section.substringAfter("g=")
         }
 
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
-        val response = app.get(url, params = params)
+        
+        if (headers["Cookie"].isNullOrEmpty()) {
+            setupHeaders()
+        }
+        
+        val response = app.get(url, params = params, headers = headers)
         val responseString = response.body.string()
-        val responseJson = parseJson<Section>(responseString)
+        val inertiaRes = parseJson<InertiaResponse>(responseString)
 
-        val titlesList = searchResponseBuilder(responseJson.titles)
+        val titlesData = inertiaRes.props.titles ?: inertiaRes.props.sliders?.firstOrNull()?.titles ?: emptyList()
+        val titlesList = searchResponseBuilder(titlesData)
 
         val hasNextPage =
             response.okhttpResponse.request.url.queryParameter("offset")?.toIntOrNull()
@@ -192,7 +198,6 @@ class StreamingCommunity : MainAPI() {
             ), hasNextPage
         )
     }
-
 
     override suspend fun search(query: String): List<SearchResponse> {
         if (query.startsWith("!!sc-domain ")) {
@@ -210,7 +215,7 @@ class StreamingCommunity : MainAPI() {
 
         Companion.updateDomain()
         val url = "$mainUrl/search"
-        val params = mapOf("q" to query)
+        val params = mutableMapOf("q" to query)
 
         if (headers["Cookie"].isNullOrEmpty()) {
             setupHeaders()
@@ -218,21 +223,27 @@ class StreamingCommunity : MainAPI() {
         val response = app.get(url, params = params, headers = headers).body.string()
         val result = parseJson<InertiaResponse>(response)
 
-        return searchResponseBuilder(result.props.titles!!)
+        return searchResponseBuilder(result.props.titles ?: emptyList())
     }
-
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
         Companion.updateDomain()
-        val searchUrl = "${mainUrl.replace("/it", "").replace("/en", "")}/api/search"
+        val searchUrl = "$mainUrl/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
         if (page > 0) {
             params["offset"] = ((page - 1) * 60).toString()
         }
+        
+        if (headers["Cookie"].isNullOrEmpty()) {
+            setupHeaders()
+        }
+        
         val response = app.get(searchUrl, params = params, headers = headers).body.string()
-        val result = parseJson<it.dogior.hadEnough.SearchResponse>(response)
-        val hasNext = (page < 3) || (page < result.lastPage)
-        return newSearchResponseList(searchResponseBuilder(result.data), hasNext = hasNext)
+        val result = parseJson<InertiaResponse>(response)
+        
+        val titlesData = result.props.titles ?: emptyList()
+        val hasNext = titlesData.size >= 60
+        return newSearchResponseList(searchResponseBuilder(titlesData), hasNext = hasNext)
     }
 
     private suspend fun getPoster(title: TitleProp): String? {
