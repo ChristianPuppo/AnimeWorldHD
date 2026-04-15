@@ -200,15 +200,16 @@ class StreamingCommunity : MainAPI() {
     }
 
     override suspend fun search(query: String): List<SearchResponse> {
-        if (query.startsWith("!!sc-domain ")) {
-            val customDomain = query.substringAfter("!!sc-domain ").trim()
+        if (query.contains("sc-domain ")) {
+            val customDomain = query.substringAfter("sc-domain ").trim()
+            Companion.resolvedDomain = customDomain
+            Companion.isDomainResolved = true
             Companion.appContext?.getSharedPreferences("SCommunityPref", android.content.Context.MODE_PRIVATE)
                 ?.edit()?.putString("custom_domain", customDomain)?.apply()
             
-            // Return dummy successful result
             return listOf(
-                newMovieSearchResponse("✅ Dominio Aggiornato a: $customDomain. Riavvia l'app.", customDomain) {
-                    posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png" 
+                newMovieSearchResponse("✅ Dominio: $customDomain", customDomain) {
+                    this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png" 
                 }
             )
         }
@@ -220,10 +221,18 @@ class StreamingCommunity : MainAPI() {
         if (headers["Cookie"].isNullOrEmpty()) {
             setupHeaders()
         }
-        val response = app.get(url, params = params, headers = headers).body.string()
-        val result = parseJson<InertiaResponse>(response)
-
-        return searchResponseBuilder(result.props.titles ?: emptyList())
+        val responseString = app.get(url, params = params, headers = headers).body.string()
+        
+        return try {
+            val result = parseJson<InertiaResponse>(responseString)
+            searchResponseBuilder(result.props.titles ?: emptyList())
+        } catch (e: Exception) {
+            listOf(
+                newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", url) {
+                    this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
+                }
+            )
+        }
     }
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
@@ -238,12 +247,22 @@ class StreamingCommunity : MainAPI() {
             setupHeaders()
         }
         
-        val response = app.get(searchUrl, params = params, headers = headers).body.string()
-        val result = parseJson<InertiaResponse>(response)
+        val responseString = app.get(searchUrl, params = params, headers = headers).body.string()
         
-        val titlesData = result.props.titles ?: emptyList()
-        val hasNext = titlesData.size >= 60
-        return newSearchResponseList(searchResponseBuilder(titlesData), hasNext = hasNext)
+        return try {
+            val result = parseJson<InertiaResponse>(responseString)
+            val titlesData = result.props.titles ?: emptyList()
+            val hasNext = titlesData.size >= 60
+            newSearchResponseList(searchResponseBuilder(titlesData), hasNext = hasNext)
+        } catch (e: Exception) {
+            newSearchResponseList(
+                listOf(
+                    newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", searchUrl) {
+                        this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
+                    }
+                ), hasNext = false
+            )
+        }
     }
 
     private suspend fun getPoster(title: TitleProp): String? {
@@ -346,9 +365,8 @@ class StreamingCommunity : MainAPI() {
 
     private fun getActualUrl(url: String) =
         if (!url.contains(mainUrl)) {
-            val replacingValue =
-                if (url.contains("/it/") || url.contains("/en/")) mainUrl.toHttpUrl().host else mainUrl.toHttpUrl().host + "/it"
-            val actualUrl = url.replace(url.toHttpUrl().host, replacingValue)
+            val replaceHost = url.toHttpUrlOrNull()?.host
+            val actualUrl = if (replaceHost != null) url.replace(replaceHost, mainUrl.toHttpUrl().host) else url
 
             Log.d("$TAG:UrlFix", "Old: $url\nNew: $actualUrl")
             actualUrl
