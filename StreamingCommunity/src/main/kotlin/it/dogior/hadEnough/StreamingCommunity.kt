@@ -31,6 +31,7 @@ import com.lagradost.cloudstream3.utils.AppUtils.parseJson
 import com.lagradost.cloudstream3.utils.AppUtils.toJson
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 
 
 class StreamingCommunity : MainAPI() {
@@ -227,7 +228,7 @@ class StreamingCommunity : MainAPI() {
             val result = parseJson<InertiaResponse>(responseString)
             searchResponseBuilder(result.props.titles ?: emptyList())
         } catch (e: Exception) {
-            listOf(
+            listOf<SearchResponse>(
                 newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", url) {
                     this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
                 }
@@ -256,7 +257,7 @@ class StreamingCommunity : MainAPI() {
             newSearchResponseList(searchResponseBuilder(titlesData), hasNext = hasNext)
         } catch (e: Exception) {
             newSearchResponseList(
-                listOf(
+                listOf<SearchResponse>(
                     newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", searchUrl) {
                         this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
                     }
