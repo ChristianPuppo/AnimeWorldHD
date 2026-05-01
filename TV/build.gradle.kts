@@ -18,7 +18,7 @@ cloudstream {
 
     tvTypes = listOf("Live")
 
-    requiresResources = true
+    requiresResources = false
 
     iconUrl = "https://raw.githubusercontent.com/doGior/doGiorsHadEnough/refs/heads/master/TV/television.png"
 }

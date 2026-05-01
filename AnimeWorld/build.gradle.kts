@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     authors = listOf("Gian-Fr", "doGior")
-    requiresResources = true
+    requiresResources = false
     description =
         "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo"
 

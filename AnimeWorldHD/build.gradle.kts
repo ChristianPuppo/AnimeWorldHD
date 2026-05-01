@@ -7,7 +7,7 @@ cloudstream {
     // All of these properties are optional, you can safely remove them
 
     authors = listOf("Gian-Fr", "doGior", "Chruis")
-    requiresResources = true
+    requiresResources = false
     description =
         "Anime from AnimeWorld with High Quality metadata from AniList. Powered by AniList GraphQL API for premium banners and posters."
 

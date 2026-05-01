@@ -19,7 +19,7 @@ cloudstream {
 
     tvTypes = listOf("Documentary")
 
-    requiresResources = true
+    requiresResources = false
     language = "en"
 
     iconUrl = "https://static-cdn.arte.tv/replay/favicons/favicon-194x194.png"

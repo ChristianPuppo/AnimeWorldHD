@@ -18,7 +18,7 @@ cloudstream {
 
     tvTypes = listOf("Others")
 
-    requiresResources = true
+    requiresResources = false
 
     iconUrl = "https://www.youtube.com/s/desktop/711fd789/img/logos/favicon_144x144.png"
 }

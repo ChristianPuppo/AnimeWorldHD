@@ -19,7 +19,7 @@ cloudstream {
 
     tvTypes = listOf("Live")
 
-    requiresResources = true
+    requiresResources = false
 
     iconUrl = "https://huhu.to/favicon.ico"
 }
