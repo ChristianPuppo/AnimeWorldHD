@@ -38,7 +38,13 @@ class StreamingCommunity : MainAPI() {
     companion object {
         var appContext: android.content.Context? = null
         var isDomainResolved = false
-        var resolvedDomain = "https://streamingcommunityz.moe"
+        var resolvedDomain = "https://streamingcommunityz.organic"
+
+        private val KNOWN_REDIRECTORS = listOf(
+            "https://streamingcommunityz.pink",
+            "https://streamingcommunityz.moe",
+            "https://streamingcommunityz.organic"
+        )
 
         suspend fun updateDomain() {
             if (isDomainResolved) return
@@ -74,16 +80,47 @@ class StreamingCommunity : MainAPI() {
                 // Config fallback
             }
 
-            try {
-                // 2. HTTP 301 Redirect Chasing
-                val probe = app.get(resolvedDomain)
-                val finalUrl = probe.okhttpResponse.request.url
-                resolvedDomain = "https://" + finalUrl.host
-                isDomainResolved = true
-                Log.d(TAG, "Domain resolved via Redirect: $resolvedDomain")
-            } catch (e: Exception) {
-                isDomainResolved = true
+            // 2. Redirect Chasing + Landing Page Parsing
+            for (knownUrl in KNOWN_REDIRECTORS) {
+                try {
+                    val probe = app.get(knownUrl, timeout = 5)
+                    val finalUrl = probe.okhttpResponse.request.url
+                    val finalHost = finalUrl.host
+
+                    // Check if we landed on the actual Inertia app (has data-page)
+                    if (probe.text.contains("data-page")) {
+                        resolvedDomain = "https://$finalHost"
+                        isDomainResolved = true
+                        Log.d(TAG, "Domain resolved via Redirect: $resolvedDomain")
+                        return
+                    }
+
+                    // We might be on a landing/SEO page - parse links for actual domain
+                    val linkRegex = Regex("""href="(https://streamingcommunity[^"]+)"""")
+                    val matches = linkRegex.findAll(probe.text)
+                    for (match in matches) {
+                        val candidate = match.groupValues[1].trimEnd('/')
+                        if (candidate != knownUrl && !candidate.contains("streaming-community.org")) {
+                            // Verify candidate is alive
+                            try {
+                                val verify = app.get(candidate, timeout = 5)
+                                if (verify.isSuccessful && verify.text.contains("data-page")) {
+                                    resolvedDomain = candidate
+                                    isDomainResolved = true
+                                    Log.d(TAG, "Domain resolved via Landing Page: $resolvedDomain")
+                                    return
+                                }
+                            } catch (_: Exception) { }
+                        }
+                    }
+                } catch (_: Exception) {
+                    // Try next redirector
+                }
             }
+
+            // 3. Fallback: just mark as resolved with current default
+            isDomainResolved = true
+            Log.d(TAG, "Domain fallback to default: $resolvedDomain")
         }
 
         private var inertiaVersion = ""
