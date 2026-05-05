@@ -21,6 +21,7 @@ include(
     "SimklProvider",
     "StreamingCommunity",
     "TV",
-    "Torrentio"
+    "Torrentio",
+    "VixStream"
 //    "YouTube"
 )
