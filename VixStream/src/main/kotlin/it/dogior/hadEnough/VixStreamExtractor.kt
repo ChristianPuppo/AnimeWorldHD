@@ -7,6 +7,7 @@ import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.newExtractorLink
+import com.lagradost.cloudstream3.utils.Qualities
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 
@@ -31,19 +32,20 @@ class VixStreamExtractor : ExtractorApi() {
         Log.w(TAG, "FINAL URL: $playlistUrl")
 
         callback.invoke(
-            newExtractorLink(
+            ExtractorLink(
                 source = "VixSrc",
                 name = "VixStream",
                 url = playlistUrl,
-                type = ExtractorLinkType.M3U8
-            ) {
-                this.referer = referer!!
-                this.headers = mapOf(
+                referer = referer ?: "https://vixsrc.to/",
+                quality = Qualities.Unknown.value,
+                isM3u8 = true,
+                headers = mapOf(
                     "Origin" to "https://vixsrc.to",
                     "User-Agent" to USER_AGENT,
                     "Accept" to "*/*"
-                )
-            }
+                ),
+                type = ExtractorLinkType.M3U8
+            )
         )
     }
 
@@ -72,6 +74,12 @@ class VixStreamExtractor : ExtractorApi() {
         
         val masterPlaylistUrl = "https://vixsrc.to$playlistPath"
         Log.d(TAG, "Master Playlist URL: $masterPlaylistUrl")
+        
+        // Fetch the master playlist manually to bypass Cloudflare
+        val masterPlaylistContent = app.get(masterPlaylistUrl, headers = headers).text
+        Log.d(TAG, "Master Playlist Content:\n$masterPlaylistContent")
+        
+        // TODO: parse the master playlist to find direct URLs if needed
         return masterPlaylistUrl
     }
 }
