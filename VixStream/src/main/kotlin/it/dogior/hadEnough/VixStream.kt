@@ -5,6 +5,7 @@ import com.lagradost.cloudstream3.Episode
 import com.lagradost.cloudstream3.HomePageList
 import com.lagradost.cloudstream3.HomePageResponse
 import com.lagradost.cloudstream3.LoadResponse
+import com.lagradost.cloudstream3.Score
 import com.lagradost.cloudstream3.LoadResponse.Companion.addActors
 import com.lagradost.cloudstream3.LoadResponse.Companion.addImdbId
 import com.lagradost.cloudstream3.LoadResponse.Companion.addScore
@@ -186,7 +187,7 @@ class VixStream : MainAPI() {
                 this.addActors(cast.map { it.name })
             }
             detail.voteAverage?.let {
-                this.addScore(it * 10)
+                this.addScore(Score(it))
             }
             if (!trailers.isNullOrEmpty()) {
                 addTrailer(trailers)
@@ -248,7 +249,7 @@ class VixStream : MainAPI() {
                 this.addActors(cast.map { it.name })
             }
             detail.voteAverage?.let {
-                this.addScore(it * 10)
+                this.addScore(Score(it))
             }
             if (!trailers.isNullOrEmpty()) {
                 addTrailer(trailers)
