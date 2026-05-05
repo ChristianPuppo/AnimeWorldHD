@@ -42,79 +42,28 @@ class VixStreamExtractor : ExtractorApi() {
 
     private suspend fun getPlaylistLink(url: String): String {
         Log.d(TAG, "Item url: $url")
-
-        val script = getScript(url)
-        val masterPlaylist = script.getJSONObject("masterPlaylist")
-        val masterPlaylistParams = masterPlaylist.getJSONObject("params")
-        val token = masterPlaylistParams.getString("token")
-        val expires = masterPlaylistParams.getString("expires")
-        val playlistUrl = masterPlaylist.getString("url")
-
-        var masterPlaylistUrl: String
-        val params = "token=${token}&expires=${expires}"
-        masterPlaylistUrl = if ("?b" in playlistUrl) {
-            "${playlistUrl.replace("?b:1", "?b=1")}&$params"
-        } else {
-            "${playlistUrl}?$params"
-        }
-        Log.d(TAG, "masterPlaylistUrl: $masterPlaylistUrl")
-
-        if (script.getBoolean("canPlayFHD")) {
-            masterPlaylistUrl += "&h=1"
-        }
-
-        Log.d(TAG, "Master Playlist URL: $masterPlaylistUrl")
-        return masterPlaylistUrl
-    }
-
-    private suspend fun getScript(url: String): JSONObject {
-        Log.d(TAG, "Item url: $url")
-        val headers = mutableMapOf(
-            "Accept" to "*/*",
-            "Alt-Used" to url.toHttpUrl().host,
-            "Connection" to "keep-alive",
-            "Host" to url.toHttpUrl().host,
-            "Referer" to referer!!,
-            "Sec-Fetch-Dest" to "iframe",
-            "Sec-Fetch-Mode" to "navigate",
-            "Sec-Fetch-Site" to "cross-site",
-            "User-Agent" to "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:131.0) Gecko/20100101 Firefox/133.0",
+        val apiUrl = url.replace("/movie/", "/api/movie/").replace("/tv/", "/api/tv/")
+        
+        val headers = mapOf(
+            "Accept" to "application/json",
+            "Referer" to "https://vixsrc.to/",
+            "Origin" to "https://vixsrc.to"
         )
 
-        val resp = app.get(url, headers = headers).document
-        val scripts = resp.select("script")
-        val script = scripts.find { it.data().contains("masterPlaylist") }!!.data().replace("\n", "\t")
-
-        val scriptJson = getSanitisedScript(script)
-        Log.d(TAG, "Script Json: $scriptJson")
-        return JSONObject(scriptJson)
-    }
-
-    private fun getSanitisedScript(script: String): String {
-        // Split by top-level assignments like window.xxx =
-        val parts = Regex("""window\.(\w+)\s*=""")
-            .split(script)
-            .drop(1) // first split part is empty before first assignment
-
-        val keys = Regex("""window\.(\w+)\s*=""")
-            .findAll(script)
-            .map { it.groupValues[1] }
-            .toList()
-
-        val jsonObjects = keys.zip(parts).map { (key, value) ->
-            // Clean up the value
-            val cleaned = value
-                .replace(";", "")
-                // Quote keys only inside objects
-                .replace(Regex("""(\{|\[|,)\s*(\w+)\s*:"""), "$1 \"$2\":")
-                // Remove trailing commas before } or ]
-                .replace(Regex(""",(\s*[}\]])"""), "$1")
-                .trim()
-
-            "\"$key\": $cleaned"
+        val response = app.get(apiUrl, headers = headers).text
+        Log.d(TAG, "API Response: $response")
+        val json = JSONObject(response)
+        
+        val embedPath = json.getString("src")
+        var playlistPath = embedPath.replace("/embed/", "/playlist/")
+        
+        // Ensure high quality is selected if missing
+        if (!playlistPath.contains("h=")) {
+            playlistPath += "&h=1"
         }
-        val finalObject = "{\n${jsonObjects.joinToString(",\n")}\n}".replace("'", "\"")
-
-        return finalObject
+        
+        val masterPlaylistUrl = "https://vixsrc.to$playlistPath"
+        Log.d(TAG, "Master Playlist URL: $masterPlaylistUrl")
+        return masterPlaylistUrl
     }
 }
