@@ -187,7 +187,7 @@ class VixStream : MainAPI() {
                 this.addActors(cast.map { it.name })
             }
             detail.voteAverage?.let {
-                this.addScore(Score(it))
+                this.addScore(Score((it * 10).toInt()))
             }
             if (!trailers.isNullOrEmpty()) {
                 addTrailer(trailers)
@@ -249,7 +249,7 @@ class VixStream : MainAPI() {
                 this.addActors(cast.map { it.name })
             }
             detail.voteAverage?.let {
-                this.addScore(Score(it))
+                this.addScore(Score((it * 10).toInt()))
             }
             if (!trailers.isNullOrEmpty()) {
                 addTrailer(trailers)
