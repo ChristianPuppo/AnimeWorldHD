@@ -31,7 +31,7 @@ data class TmdbItem(
     @JsonProperty("vote_average") val voteAverage: Double?,
     @JsonProperty("genre_ids") val genreIds: List<Int>?
 ) {
-    fun getTitle() = title ?: name ?: "Unknown"
+    fun getDisplayTitle() = title ?: name ?: "Unknown"
     fun getDate() = releaseDate ?: firstAirDate
     fun getType() = mediaType ?: "movie"
     fun getPosterUrl() = posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }

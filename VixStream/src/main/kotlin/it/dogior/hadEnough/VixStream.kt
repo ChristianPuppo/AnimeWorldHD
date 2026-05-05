@@ -97,7 +97,7 @@ class VixStream : MainAPI() {
 
         if (!isAvailable(tmdbId, type)) return null
 
-        val title = item.getTitle()
+        val title = item.getDisplayTitle()
         val posterUrl = item.getPosterUrl()
         // Store type + tmdbId in the URL for later retrieval
         val dataUrl = "$VIXSRC_BASE/$type/$tmdbId"
