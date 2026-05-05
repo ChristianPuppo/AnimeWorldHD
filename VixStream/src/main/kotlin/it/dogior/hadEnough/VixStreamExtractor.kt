@@ -17,6 +17,8 @@ class VixStreamExtractor : ExtractorApi() {
     val TAG = "VixStreamExtractor"
     private var referer: String? = null
 
+    private val USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36"
+
     override suspend fun getUrl(
         url: String,
         referer: String?,
@@ -36,6 +38,11 @@ class VixStreamExtractor : ExtractorApi() {
                 type = ExtractorLinkType.M3U8
             ) {
                 this.referer = referer!!
+                this.headers = mapOf(
+                    "Origin" to "https://vixsrc.to",
+                    "User-Agent" to USER_AGENT,
+                    "Accept" to "*/*"
+                )
             }
         )
     }
@@ -47,7 +54,8 @@ class VixStreamExtractor : ExtractorApi() {
         val headers = mapOf(
             "Accept" to "application/json",
             "Referer" to "https://vixsrc.to/",
-            "Origin" to "https://vixsrc.to"
+            "Origin" to "https://vixsrc.to",
+            "User-Agent" to USER_AGENT
         )
 
         val response = app.get(apiUrl, headers = headers).text
