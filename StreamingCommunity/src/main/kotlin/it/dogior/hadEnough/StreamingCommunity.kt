@@ -38,12 +38,12 @@ class StreamingCommunity : MainAPI() {
     companion object {
         var appContext: android.content.Context? = null
         var isDomainResolved = false
-        var resolvedDomain = "https://streamingcommunityz.organic"
+        var resolvedDomain = "https://streamingcommunityz.bargains"
 
         private val KNOWN_REDIRECTORS = listOf(
             "https://streamingcommunityz.pink",
-            "https://streamingcommunityz.moe",
-            "https://streamingcommunityz.organic"
+            "https://streamingcommunityz.organic",
+            "https://streamingcommunityz.bargains"
         )
 
         suspend fun updateDomain() {
