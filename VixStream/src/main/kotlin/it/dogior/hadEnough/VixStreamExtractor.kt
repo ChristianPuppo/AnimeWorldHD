@@ -3,6 +3,7 @@ package it.dogior.hadEnough
 import android.util.Log
 import com.lagradost.cloudstream3.SubtitleFile
 import com.lagradost.cloudstream3.app
+import com.lagradost.cloudstream3.network.CloudflareKiller
 import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
@@ -32,20 +33,19 @@ class VixStreamExtractor : ExtractorApi() {
         Log.w(TAG, "FINAL URL: $playlistUrl")
 
         callback.invoke(
-            ExtractorLink(
+            newExtractorLink(
                 source = "VixSrc",
                 name = "VixStream",
                 url = playlistUrl,
-                referer = referer ?: "https://vixsrc.to/",
-                quality = Qualities.Unknown.value,
-                isM3u8 = true,
-                headers = mapOf(
+                type = ExtractorLinkType.M3U8
+            ) {
+                this.referer = referer ?: "https://vixsrc.to/"
+                this.headers = mapOf(
                     "Origin" to "https://vixsrc.to",
                     "User-Agent" to USER_AGENT,
                     "Accept" to "*/*"
-                ),
-                extractorData = null
-            )
+                )
+            }
         )
     }
 
@@ -60,7 +60,7 @@ class VixStreamExtractor : ExtractorApi() {
             "User-Agent" to USER_AGENT
         )
 
-        val response = app.get(apiUrl, headers = headers).text
+        val response = app.get(apiUrl, headers = headers, interceptor = CloudflareKiller()).text
         Log.d(TAG, "API Response: $response")
         val json = JSONObject(response)
         
