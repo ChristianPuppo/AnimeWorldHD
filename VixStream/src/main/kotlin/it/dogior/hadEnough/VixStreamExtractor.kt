@@ -38,13 +38,13 @@ class VixStreamExtractor : ExtractorApi() {
                 url = playlistUrl,
                 referer = referer ?: "https://vixsrc.to/",
                 quality = Qualities.Unknown.value,
-                isM3u8 = true,
                 headers = mapOf(
                     "Origin" to "https://vixsrc.to",
                     "User-Agent" to USER_AGENT,
                     "Accept" to "*/*"
                 ),
-                type = ExtractorLinkType.M3U8
+                extractorData = null,
+                isDash = false
             )
         )
     }
