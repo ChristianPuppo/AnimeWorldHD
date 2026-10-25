@@ -5,7 +5,7 @@ version = 14
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Movies and Shows from CB01"
+    description = "Film e Serie TV da CB01 (CineBlog01)."
     authors = listOf("doGior")
 
     /**
@@ -22,7 +22,7 @@ cloudstream {
     requiresResources = false
     language = "it"
 
-    iconUrl = "https://cb01.uno/apple-icon-180x180px.png"
+    iconUrl = "https://cb01one.com/apple-icon-180x180px.png"
 }
 dependencies{
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1")

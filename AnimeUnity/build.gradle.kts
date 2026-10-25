@@ -5,7 +5,7 @@ version = 15
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Anime from AnimeUnity"
+    description = "Anime in streaming SUB-ITA e ITA da AnimeUnity."
     authors = listOf("doGior")
 
     /**

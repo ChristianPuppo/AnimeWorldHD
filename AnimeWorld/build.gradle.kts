@@ -8,8 +8,7 @@ cloudstream {
 
     authors = listOf("Gian-Fr", "doGior")
     requiresResources = false
-    description =
-        "Anime from AnimeWorld. This plugin is a fork of the AnimeWorld plugin in the ItalianProvider repo"
+    description = "Anime in streaming SUB-ITA e ITA da AnimeWorld."
 
     /**
      * Status int as the following:

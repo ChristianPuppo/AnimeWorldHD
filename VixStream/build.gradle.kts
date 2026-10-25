@@ -5,7 +5,7 @@ version = 2
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "Film e Serie TV via VixSrc + TMDB. Dominio stabile, nessun aggiornamento necessario."
+    description = "Film e Serie TV via VixCloud e TMDB con audio italiano ed alta definizione (FHD)."
     authors = listOf("doGior")
 
     /**

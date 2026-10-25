@@ -5,7 +5,7 @@ version = 43
 cloudstream {
     // All of these properties are optional, you can safely remove them
 
-    description = "StreamingCommunity. Include auto-redirect tracker. In caso estremo di blocco totale, cerca nell'app: !!sc-domain https://nuovo.sito e riavvia l'app."
+    description = "Film e Serie TV da StreamingCommunity in italiano con rilevamento automatico del dominio."
     authors = listOf("doGior")
 
     /**
