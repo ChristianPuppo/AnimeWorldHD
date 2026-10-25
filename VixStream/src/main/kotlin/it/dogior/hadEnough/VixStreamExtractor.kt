@@ -8,8 +8,6 @@ import com.lagradost.cloudstream3.utils.ExtractorApi
 import com.lagradost.cloudstream3.utils.ExtractorLink
 import com.lagradost.cloudstream3.utils.ExtractorLinkType
 import com.lagradost.cloudstream3.utils.newExtractorLink
-import com.lagradost.cloudstream3.utils.Qualities
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.json.JSONObject
 
 class VixStreamExtractor : ExtractorApi() {
@@ -39,9 +37,10 @@ class VixStreamExtractor : ExtractorApi() {
                 url = playlistUrl,
                 type = ExtractorLinkType.M3U8
             ) {
-                this.referer = referer ?: "https://vixsrc.to/"
+                this.referer = "https://vixcloud.cc/"
                 this.headers = mapOf(
-                    "Origin" to "https://vixsrc.to",
+                    "Referer" to "https://vixcloud.cc/",
+                    "Origin" to "https://vixcloud.cc",
                     "User-Agent" to USER_AGENT,
                     "Accept" to "*/*"
                 )
@@ -52,34 +51,46 @@ class VixStreamExtractor : ExtractorApi() {
     private suspend fun getPlaylistLink(url: String): String {
         Log.d(TAG, "Item url: $url")
         val apiUrl = url.replace("/movie/", "/api/movie/").replace("/tv/", "/api/tv/")
-        
-        val headers = mapOf(
+
+        val apiHeaders = mapOf(
             "Accept" to "application/json",
             "Referer" to "https://vixsrc.to/",
             "Origin" to "https://vixsrc.to",
             "User-Agent" to USER_AGENT
         )
 
-        val response = app.get(apiUrl, headers = headers, interceptor = CloudflareKiller()).text
+        val response = app.get(apiUrl, headers = apiHeaders, interceptor = CloudflareKiller()).text
         Log.d(TAG, "API Response: $response")
         val json = JSONObject(response)
-        
+
         val embedPath = json.getString("src")
-        var playlistPath = embedPath.replace("/embed/", "/playlist/")
-        
-        // Ensure high quality is selected if missing
-        if (!playlistPath.contains("h=")) {
-            playlistPath += "&h=1"
+        val embedUrl = if (embedPath.startsWith("http")) embedPath else "https://vixcloud.cc$embedPath"
+        Log.d(TAG, "Embed URL: $embedUrl")
+
+        val embedHeaders = mapOf(
+            "User-Agent" to USER_AGENT,
+            "Referer" to "https://vixsrc.to/"
+        )
+
+        val embedHtml = app.get(embedUrl, headers = embedHeaders, interceptor = CloudflareKiller()).text
+
+        // Extract masterPlaylist parameters: token, expires, base playlist url
+        val token = Regex("""['"]token['"]\s*:\s*['"]([^'"]+)['"]""").find(embedHtml)?.groupValues?.get(1)
+            ?: throw RuntimeException("VixStream: token not found in embed HTML")
+        val expires = Regex("""['"]expires['"]\s*:\s*['"]([^'"]+)['"]""").find(embedHtml)?.groupValues?.get(1)
+            ?: throw RuntimeException("VixStream: expires not found in embed HTML")
+        val basePlaylistUrl = Regex("""url\s*:\s*['"](https?://[^'"]+)['"]""").find(embedHtml)?.groupValues?.get(1)
+            ?: throw RuntimeException("VixStream: base playlist URL not found in embed HTML")
+
+        val canPlayFHD = embedHtml.contains("canPlayFHD = true") || embedUrl.contains("canPlayFHD=1")
+
+        val separator = if (basePlaylistUrl.contains("?")) "&" else "?"
+        var playlistUrl = "$basePlaylistUrl${separator}token=$token&expires=$expires"
+        if (canPlayFHD && !playlistUrl.contains("h=")) {
+            playlistUrl += "&h=1"
         }
-        
-        val masterPlaylistUrl = "https://vixsrc.to$playlistPath"
-        Log.d(TAG, "Master Playlist URL: $masterPlaylistUrl")
-        
-        // Fetch the master playlist manually to bypass Cloudflare
-        val masterPlaylistContent = app.get(masterPlaylistUrl, headers = headers).text
-        Log.d(TAG, "Master Playlist Content:\n$masterPlaylistContent")
-        
-        // TODO: parse the master playlist to find direct URLs if needed
-        return masterPlaylistUrl
+
+        Log.d(TAG, "Master Playlist URL: $playlistUrl")
+        return playlistUrl
     }
 }
