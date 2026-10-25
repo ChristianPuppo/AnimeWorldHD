@@ -38,12 +38,12 @@ class StreamingCommunity : MainAPI() {
     companion object {
         var appContext: android.content.Context? = null
         var isDomainResolved = false
-        var resolvedDomain = "https://streamingcommunityz.bargains"
+        var resolvedDomain = "https://streamingcommunityz.build"
 
         private val KNOWN_REDIRECTORS = listOf(
-            "https://streamingcommunityz.pink",
-            "https://streamingcommunityz.organic",
-            "https://streamingcommunityz.bargains"
+            "https://streamingcommunityz.build",
+            "https://streamingcommunity.cv",
+            "https://streaming-community.biz"
         )
 
         suspend fun updateDomain() {
@@ -53,7 +53,7 @@ class StreamingCommunity : MainAPI() {
             try {
                 val prefs = appContext?.getSharedPreferences("SCommunityPref", android.content.Context.MODE_PRIVATE)
                 val customDomain = prefs?.getString("custom_domain", null)
-                if (!customDomain.isNullOrBlank()) {
+                if (!customDomain.isNullOrBlank() && !customDomain.contains("bargains") && !customDomain.contains("organic") && !customDomain.contains("pink") && !customDomain.contains("moe")) {
                     resolvedDomain = customDomain.trimEnd('/')
                     isDomainResolved = true
                     Log.d(TAG, "Domain resolved from Custom Prefs: $resolvedDomain")
@@ -65,7 +65,7 @@ class StreamingCommunity : MainAPI() {
 
             try {
                 // 1. Remote JSON Config Fetch
-                val configUrl = "https://raw.githubusercontent.com/ChristianPuppo/doGiorsHadEnough/main/domains.json"
+                val configUrl = "https://raw.githubusercontent.com/ChristianPuppo/AnimeWorldHD/main/domains.json"
                 val responseOpt = app.get(configUrl, timeout = 3)
                 if (responseOpt.isSuccessful) {
                     val config = parseJson<Map<String, String>>(responseOpt.text)
@@ -247,7 +247,7 @@ class StreamingCommunity : MainAPI() {
             
             return listOf(
                 newMovieSearchResponse("✅ Dominio: $customDomain", customDomain) {
-                    this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png" 
+                    this.posterUrl = "$resolvedDomain/apple-touch-icon.png?v=2" 
                 }
             )
         }
@@ -267,13 +267,29 @@ class StreamingCommunity : MainAPI() {
         } catch (e: Exception) {
             listOf<SearchResponse>(
                 newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", url) {
-                    this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
+                    this.posterUrl = "$resolvedDomain/apple-touch-icon.png?v=2"
                 }
             )
         }
     }
 
     override suspend fun search(query: String, page: Int): SearchResponseList {
+        if (query.contains("sc-domain ")) {
+            val customDomain = query.substringAfter("sc-domain ").trim()
+            Companion.resolvedDomain = customDomain
+            Companion.isDomainResolved = true
+            Companion.appContext?.getSharedPreferences("SCommunityPref", android.content.Context.MODE_PRIVATE)
+                ?.edit()?.putString("custom_domain", customDomain)?.apply()
+
+            return newSearchResponseList(
+                listOf(
+                    newMovieSearchResponse("✅ Dominio: $customDomain", customDomain) {
+                        this.posterUrl = "$resolvedDomain/apple-touch-icon.png?v=2"
+                    }
+                ), hasNext = false
+            )
+        }
+
         Companion.updateDomain()
         val searchUrl = "$mainUrl/search"
         val params = mutableMapOf("q" to query, "lang" to "it")
@@ -296,7 +312,7 @@ class StreamingCommunity : MainAPI() {
             newSearchResponseList(
                 listOf<SearchResponse>(
                     newMovieSearchResponse("❌ ERRORE: ${e.message?.take(50)}", searchUrl) {
-                        this.posterUrl = "https://cdn.streamingcommunityz.moe/images/pizza.png"
+                        this.posterUrl = "$resolvedDomain/apple-touch-icon.png?v=2"
                     }
                 ), hasNext = false
             )
@@ -366,7 +382,7 @@ class StreamingCommunity : MainAPI() {
             return tvShow
         } else {
             val data = LoadData(
-                "$mainUrl/iframe/${title.id}&canPlayFHD=1",
+                "$mainUrl/iframe/${title.id}?canPlayFHD=1",
                 "movie",
                 title.tmdbId
             )
@@ -464,7 +480,8 @@ class StreamingCommunity : MainAPI() {
         if (data.isEmpty()) return false
         val loadData = parseJson<LoadData>(data)
 
-        val response = app.get(loadData.url).document
+        val actualUrl = getActualUrl(loadData.url)
+        val response = app.get(actualUrl).document
         val iframeSrc = response.select("iframe").attr("src")
 
         VixCloudExtractor().getUrl(
