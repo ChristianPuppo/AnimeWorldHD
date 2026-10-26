@@ -401,7 +401,7 @@ open class AnimeWorldCore(isSplit: Boolean = false) : MainAPI() {
         val epElems = servers.select("a[data-episode-num=\"$epNumber\"]")
 
         val apiLinks = epElems.map {
-            "https://www.animeworld.so/api/episode/info?id=" + it.attr("data-id")
+            "$mainUrl/api/episode/info?id=" + it.attr("data-id")
         }
         val apiResults = apiLinks.mapNotNull {
             tryParseJson<Json>(request(it).text)
