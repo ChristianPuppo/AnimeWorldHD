@@ -38,9 +38,10 @@ class StreamingCommunity : MainAPI() {
     companion object {
         var appContext: android.content.Context? = null
         var isDomainResolved = false
-        var resolvedDomain = "https://streamingcommunityz.build"
+        var resolvedDomain = "https://streamingcommunityz.nexus"
 
         private val KNOWN_REDIRECTORS = listOf(
+            "https://streamingcommunityz.nexus",
             "https://streamingcommunityz.build",
             "https://streamingcommunity.cv",
             "https://streaming-community.biz"
@@ -480,29 +481,45 @@ class StreamingCommunity : MainAPI() {
         if (data.isEmpty()) return false
         val loadData = parseJson<LoadData>(data)
 
-        val actualUrl = getActualUrl(loadData.url)
-        val response = app.get(actualUrl).document
-        val iframeSrc = response.select("iframe").attr("src")
+        // 1. Primary: VixCloud via StreamingCommunity iframe
+        try {
+            val actualUrl = getActualUrl(loadData.url)
+            val response = app.get(actualUrl).document
+            val iframeSrc = response.select("iframe").attr("src")
 
-        VixCloudExtractor().getUrl(
-            url = iframeSrc,
-            referer = mainUrl,
-            subtitleCallback = subtitleCallback,
-            callback = callback
-        )
-
-        val vixsrcUrl = if (loadData.type == "movie") {
-            "https://vixsrc.to/movie/${loadData.tmdbId}"
-        } else {
-            "https://vixsrc.to/tv/${loadData.tmdbId}/${loadData.seasonNumber}/${loadData.episodeNumber}"
+            if (iframeSrc.isNotEmpty()) {
+                VixCloudExtractor().getUrl(
+                    url = iframeSrc,
+                    referer = resolvedDomain,
+                    subtitleCallback = subtitleCallback,
+                    callback = callback
+                )
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "VixCloud primary extract failed: ${e.message}")
         }
 
-        VixSrcExtractor().getUrl(
-            url = vixsrcUrl,
-            referer = "https://vixsrc.to/",
-            subtitleCallback = subtitleCallback,
-            callback = callback
-        )
+        // 2. Fallback: VixSrc via TMDB ID (if available)
+        if (loadData.tmdbId != null) {
+            try {
+                val vixsrcUrl = if (loadData.type == "movie") {
+                    "https://vixsrc.to/movie/${loadData.tmdbId}"
+                } else if (loadData.seasonNumber != null && loadData.episodeNumber != null) {
+                    "https://vixsrc.to/tv/${loadData.tmdbId}/${loadData.seasonNumber}/${loadData.episodeNumber}"
+                } else null
+
+                if (vixsrcUrl != null) {
+                    VixSrcExtractor().getUrl(
+                        url = vixsrcUrl,
+                        referer = "https://vixsrc.to/",
+                        subtitleCallback = subtitleCallback,
+                        callback = callback
+                    )
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "VixSrc fallback failed: ${e.message}")
+            }
+        }
 
         return true
     }
